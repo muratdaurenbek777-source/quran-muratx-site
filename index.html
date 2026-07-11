@@ -39,7 +39,7 @@
 <script>
 const i18n = {ru: {readQuranBtn:"📖 Читать Коран", names:["Фаджр","Восход","Зухр","Аср","Магриб","Иша"], next:"Сейчас"}, kk: {readQuranBtn:"📖 Құран оқу", names:["Таң","Күншығыс","Бесін","Екінті","Ақшам","Құптан"], next:"Қазір"}};
 let currentLang = localStorage.getItem('lang') || 'ru';
-const KAABA_IMAGES = ['https://i.imgur.com/QhKm8nC.jpg','https://i.imgur.com/8QeJb1p.jpg','https://i.imgur.com/4K6Yx9F.jpg','https://i.imgur.com/k2nGvLp.jpg','https://i.imgur.com/vH5t8sR.jpg'];
+const KAABA_IMAGES = ['https://images.unsplash.com/photo-1564769625392-651b7c5f9f5d?w=1920','https://i.imgur.com/8QeJb1p.jpg','https://i.imgur.com/4K6Yx9F.jpg','https://i.imgur.com/k2nGvLp.jpg','https://i.imgur.com/vH5t8sR.jpg'];
 let bgIndex = 0;
 function setLang(lang) {currentLang = lang; localStorage.setItem('lang', lang); document.getElementById('lang').value = lang; document.getElementById('readQuranBtn').textContent = i18n[lang].readQuranBtn; updatePrayerTimes();}
 document.getElementById('lang').addEventListener('change', e => setLang(e.target.value));
