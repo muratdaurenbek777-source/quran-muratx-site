@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quran Muratx — Намаз, Кибла, Коран</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+.font-arabic { font-family: 'Amiri', serif; }
+    body { font-family: 'Inter', sans-serif; }
+#hero { transition: background-image 0.7s ease-in-out; }
+  </style>
+</head>
+<body class="bg-gray-100">
+  <div id="hero" class="min-h-screen text-white relative" style="background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://i.imgur.com/QhKm8nC.jpg') center/cover;">
+    <header class="border-b border-white/20 backdrop-blur-sm">
+      <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+        <h1 class="text-xl font-bold">Quran Muratx</h1>
+        <div class="flex gap-2 items-center">
+          <button id="bgSwitch" class="px-3 py-1.5 rounded-lg bg-white/20 hover:bg-white/30 text-xs">🕋 Фон 1/5</button>
+          <select id="lang" class="border border-white/30 rounded-lg px-2 py-1.5 bg-white/20 text-xs">
+            <option value="ru">Русский</option>
+            <option value="kk">Қазақша</option>
+          </select>
+        </div>
+      </div>
+    </header>
+    <div class="max-w-6xl mx-auto px-4 py-8 text-center">
+      <div class="mb-2 text-sm text-white/80">Алматы, Казахстан</div>
+      <div class="mb-1 text-sm text-white/80" id="hijriDate">--</div>
+      <div class="text-5xl md:text-7xl font-bold mb-6 tracking-wider" id="currentTime">--:--:--</div>
+      <div id="prayerTimes" class="grid grid-cols-3 md:grid-cols-6 gap-2 max-w-5xl mx-auto mb-6"></div>
+      <a href="/quran.html" class="inline-block bg-emerald-600 hover:bg-emerald-700 px-8 py-3 rounded-xl font-bold transition">
+        <span id="readQuranBtn">📖 Читать Коран</span>
+      </a>
+    </div>
+  </div>
+<script>
+const i18n = {ru: {readQuranBtn:"📖 Читать Коран", names:["Фаджр","Восход","Зухр","Аср","Магриб","Иша"], next:"Сейчас"}, kk: {readQuranBtn:"📖 Құран оқу", names:["Таң","Күншығыс","Бесін","Екінті","Ақшам","Құптан"], next:"Қазір"}};
+let currentLang = localStorage.getItem('lang') || 'ru';
+const KAABA_IMAGES = ['https://i.imgur.com/QhKm8nC.jpg','https://i.imgur.com/8QeJb1p.jpg','https://i.imgur.com/4K6Yx9F.jpg','https://i.imgur.com/k2nGvLp.jpg','https://i.imgur.com/vH5t8sR.jpg'];
+let bgIndex = 0;
+function setLang(lang) {currentLang = lang; localStorage.setItem('lang', lang); document.getElementById('lang').value = lang; document.getElementById('readQuranBtn').textContent = i18n[lang].readQuranBtn; updatePrayerTimes();}
+document.getElementById('lang').addEventListener('change', e => setLang(e.target.value));
+document.getElementById('bgSwitch').addEventListener('click', () => {bgIndex = (bgIndex + 1) % KAABA_IMAGES.length; document.getElementById('hero').style.backgroundImage = `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('${KAABA_IMAGES[bgIndex]}')`; document.getElementById('bgSwitch').textContent = `🕋 Фон ${bgIndex+1}/5`;});
+async function updatePrayerTimes() {
+  try {
+    const res = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://api.aladhan.com/v1/timingsByCity?city=Almaty&country=Kazakhstan&method=2'));
+    const {contents} = await res.json();
+    const data = JSON.parse(contents);
+    const t = data.data.timings;
+    const names = i18n[currentLang].names;
+    const times = [t.Fajr, t.Sunrise, t.Dhuhr, t.Asr, t.Maghrib, t.Isha];
+    const now = new Date();
+    const nowMins = now.getHours() * 60 + now.getMinutes();
+    document.getElementById('prayerTimes').innerHTML = times.map((time, i) => {
+      const [h, m] = time.split(':').map(Number);
+      const nextIdx = times.findIndex(t => { const [th, tm] = t.split(':').map(Number); return th * 60 + tm > nowMins; });
+      let isNext = nextIdx === i || (nextIdx === -1 && i === 0);
+      return `<div class="rounded-xl p-3 ${isNext? 'bg-emerald-500 ring-2 ring-white' : 'bg-white/20'} backdrop-blur"><div class="text-xs">${names[i]} ${isNext? `• ${i18n[currentLang].next}` : ''}</div><div class="text-xl font-bold">${time}</div></div>`;
+    }).join('');
+  } catch(e) {}
+}
+async function updateHijriDate() {
+  try {
+    const d = new Date().toLocaleDateString('en-GB').replaceAll('/','-');
+    const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(`https://api.aladhan.com/v1/gToH?date=${d}`)}`);
+    const {contents} = await res.json();
+    const h = JSON.parse(contents).data.hijri;
+    document.getElementById('hijriDate').textContent = `${h.day} ${h.month.en} ${h.year} AH`;
+  } catch(e){}
+}
+setInterval(() => {document.getElementById('currentTime').textContent = new Date().toLocaleTimeString('ru-RU');}, 1000);
+updatePrayerTimes(); updateHijriDate(); setInterval(updatePrayerTimes, 60000); setLang(currentLang);
+</script>
+</body>
+</html>
