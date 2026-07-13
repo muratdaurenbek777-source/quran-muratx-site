@@ -10,80 +10,124 @@
         body {
             font-family: 'Manrope', sans-serif;
             height: 100vh;
-            /* 3 запасных фона. Если один не грузится — включится следующий */
-            background: 
-                linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
-                url('https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?q=80&w=2670') center/cover no-repeat,
-                url('https://images.pexels.com/photos/1624496/pexels-photo-1624496.jpeg?auto=compress&cs=tinysrgb&w=1920') center/cover no-repeat,
-                #1a1a1a; /* Серый если вообще ничего не загрузится */
             color: white;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             overflow: hidden;
+            transition: background 0.5s ease;
         }
-        .header {
+       .bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), var(--bg-url) center/cover no-repeat;
+            z-index: -1;
+            transition: 0.5s;
+        }
+       .header {
             display: flex; justify-content: space-between; align-items: center;
             padding: 20px 40px; background: rgba(0,0,0,0.4); backdrop-filter: blur(15px);
             border-bottom: 1px solid rgba(255,255,255,0.15);
         }
-        .logo { font-size: 24px; font-weight: 800; }
-        .controls { display: flex; gap: 12px; }
-        .btn {
+       .logo { font-size: 24px; font-weight: 800; }
+       .controls { display: flex; gap: 12px; }
+       .btn {
             background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4);
             color: white; padding: 10px 18px; border-radius: 12px; cursor: pointer;
             font-weight: 600; backdrop-filter: blur(10px); transition: 0.3s;
         }
-        .btn:hover { background: rgba(255,255,255,0.3); }
-        .main { text-align: center; padding: 20px; }
-        .glass {
+       .btn:hover { background: rgba(255,255,255,0.3); }
+       .btn:active { transform: scale(0.95); }
+       .main { text-align: center; padding: 20px; }
+       .glass {
             display: inline-block; background: rgba(0,0,0,0.4); padding: 40px 60px;
             border-radius: 24px; backdrop-filter: blur(20px);
             border: 1px solid rgba(255,255,255,0.25); box-shadow: 0 8px 32px rgba(0,0,0,0.5);
         }
-        .city { font-size: 18px; font-weight: 300; opacity: 0.9; margin-bottom: 8px; }
-        .label { font-size: 16px; font-weight: 300; opacity: 0.8; margin-bottom: 16px; }
-        .time { font-size: 80px; font-weight: 800; letter-spacing: 2px; line-height: 1; margin-bottom: 30px; }
-        .quran-btn {
+       .city { font-size: 18px; font-weight: 300; opacity: 0.9; margin-bottom: 8px; }
+       .label { font-size: 16px; font-weight: 300; opacity: 0.8; margin-bottom: 16px; }
+       .time { font-size: 80px; font-weight: 800; letter-spacing: 2px; line-height: 1; margin-bottom: 10px; }
+       .next-prayer { font-size: 14px; opacity: 0.7; margin-bottom: 30px; }
+       .quran-btn {
             background: linear-gradient(135deg, #10b981, #059669); border: none; color: white;
             padding: 16px 40px; font-size: 18px; font-weight: 600; border-radius: 14px;
             cursor: pointer; transition: 0.3s; box-shadow: 0 4px 20px rgba(16,185,129,0.5);
+            text-decoration: none; display: inline-block;
         }
-        .quran-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(16,185,129,0.7); }
-        .footer { height: 60px; }
+       .quran-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(16,185,129,0.7); }
+       .footer { height: 60px; }
         @media (max-width: 600px) {
-            .time { font-size: 56px; } .glass { padding: 30px 20px; } .header { padding: 15px 20px; }
+           .time { font-size: 56px; }.glass { padding: 30px 20px; }.header { padding: 15px 20px; }
         }
     </style>
 </head>
 <body>
+    <div class="bg" id="bg"></div>
+    
     <header class="header">
         <div class="logo">Quran Muratx</div>
         <div class="controls">
-            <button class="btn">🕋 Фон 1/5</button>
+            <button class="btn" id="bgBtn">🕋 Фон 1/5</button>
             <button class="btn">Русский</button>
         </div>
     </header>
+
     <main class="main">
         <div class="glass">
             <div class="city">Алматы, Казахстан</div>
-            <div class="label">Время до Зухр</div>
-            <div class="time" id="timer">22:15:57</div>
-            <button class="quran-btn">📖 Читать Коран</button>
+            <div class="label" id="prayerLabel">Загрузка...</div>
+            <div class="time" id="timer">--:--:--</div>
+            <div class="next-prayer" id="nextPrayer"></div>
+            <a href="https://quran.com" target="_blank" class="quran-btn">📖 Читать Коран</a>
         </div>
     </main>
+
     <footer class="footer"></footer>
+
     <script>
-        function updateTimer() {
-            const now = new Date(); const zuhr = new Date();
-            zuhr.setHours(12, 30, 0, 0); if (now > zuhr) zuhr.setDate(zuhr.getDate() + 1);
-            const diff = zuhr - now;
-            const h = String(Math.floor(diff / 3600000)).padStart(2,'0');
-            const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2,'0');
-            const s = String(Math.floor((diff % 60000) / 1000)).padStart(2,'0');
-            document.getElementById('timer').textContent = `${h}:${m}:${s}`;
+        // 1. 5 фонов с Каабой и мечетями
+        const backgrounds = [
+            'url(https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?q=80&w=2670)', // Кааба
+            'url(https://images.unsplash.com/photo-1564769625392-651b7c5f9f5d?q=80&w=2670)', // Мечеть Пророка
+            'url(https://images.pexels.com/photos/1624496/pexels-photo-1624496.jpeg?auto=compress&cs=tinysrgb&w=1920)', // Мечеть вечером
+            'url(https://images.unsplash.com/photo-1580418827493-f2b22c0a76cb?q=80&w=2670)', // Кааба сверху
+            'url(https://images.unsplash.com/photo-1542816417-0983c9c9ad53?q=80&w=2670)' // Мечеть аль-Харам
+        ];
+        
+        let currentBg = 0;
+        const bgEl = document.getElementById('bg');
+        const bgBtn = document.getElementById('bgBtn');
+        
+        function setBackground(index) {
+            bgEl.style.setProperty('--bg-url', backgrounds[index]);
+            bgBtn.textContent = `🕋 Фон ${index + 1}/5`;
+            localStorage.setItem('bgIndex', index);
         }
-        setInterval(updateTimer, 1000); updateTimer();
-    </script>
-</body>
-</html>
+        
+        // 2. Переключение фонов
+        bgBtn.onclick = () => {
+            currentBg = (currentBg + 1) % backgrounds.length;
+            setBackground(currentBg);
+        };
+        
+        // Загружаем сохраненный фон
+        currentBg = parseInt(localStorage.getItem('bgIndex')) || 0;
+        setBackground(currentBg);
+
+        // 3. Реальные времена намаза для Алматы через API
+        async function loadPrayerTimes() {
+            try {
+                const res = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Almaty&country=Kazakhstan&method=2');
+                const data = await res.json();
+                const timings = data.data.timings;
+                
+                const prayers = [
+                    { name: 'Фаджр', time: timings.Fajr },
+                    { name: 'Восход', time: timings.Sunrise },
+                    { name: 'Зухр', time: timings.Dhuhr },
+                    { name: 'Аср', time: timings.Asr },
+                    { name: 'Магриб', time: timings.Maghrib },
+                    { name: 'Иша', time: timings.Isha }
+                ];
+                
+                updateCountdown(prayers);
