@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quran MuratX</title>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;600;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Manrope', sans-serif;
             height: 100vh;
             color: white;
-            overflow: hidden;
+            overflow-x: hidden;
             background: linear-gradient(135deg, #0f172a, #1e293b);
         }
       .bg {
@@ -28,34 +28,37 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 40px;
+            padding: 15px 40px;
             background: rgba(0,0,0,0.4);
             backdrop-filter: blur(15px);
             border-bottom: 1px solid rgba(255,255,255,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-      .logo { font-size: 24px; font-weight: 800; }
-      .controls { display: flex; gap: 12px; }
+      .logo { font-size: 24px; font-weight: 800; cursor: pointer; }
+      .controls { display: flex; gap: 8px; flex-wrap: wrap; }
       .btn {
             background: rgba(255,255,255,0.2);
             border: 1px solid rgba(255,255,255,0.4);
             color: white;
-            padding: 10px 18px;
+            padding: 8px 14px;
             border-radius: 12px;
             cursor: pointer;
             font-weight: 600;
             backdrop-filter: blur(10px);
             transition: 0.3s;
             font-family: inherit;
+            font-size: 14px;
         }
       .btn:hover { background: rgba(255,255,255,0.3); }
+      .btn.active { background: #10b981; border-color: #10b981; }
       .main {
             text-align: center;
             padding: 20px;
-            height: calc(100vh - 81px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            min-height: calc(100vh - 71px);
         }
+      .container { width: 100%; max-width: 900px; margin: 0 auto; }
       .glass {
             background: rgba(0,0,0,0.4);
             padding: 30px 35px;
@@ -63,9 +66,11 @@
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255,255,255,0.25);
             box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-            max-width: 550px;
             width: 100%;
+            margin-bottom: 20px;
         }
+      
+        /* ТАЙМЕР */
       .city { font-size: 18px; font-weight: 300; opacity: 0.9; margin-bottom: 8px; }
       .hijri { font-size: 14px; opacity: 0.7; margin-bottom: 16px; }
       .label { font-size: 16px; font-weight: 300; opacity: 0.8; margin-bottom: 16px; }
@@ -83,7 +88,6 @@
       .prayer-name { opacity: 0.7; margin-bottom: 4px; }
       .prayer-time { font-weight: 600; }
       .prayer-item.active { color: #10b981; }
-      .prayer-item.active.prayer-time { font-weight: 800; }
       .quran-btn {
             background: linear-gradient(135deg, #10b981, #059669);
             border: none;
@@ -98,149 +102,49 @@
             text-decoration: none;
             display: inline-block;
             font-family: inherit;
+            margin: 6px;
         }
       .quran-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(16,185,129,0.7); }
-        @media (max-width: 600px) {
-          .time { font-size: 48px; }
-          .glass { padding: 20px 15px; margin: 0 15px; }
-          .header { padding: 15px 20px; }
-          .prayer-list { grid-template-columns: repeat(3, 1fr); gap: 10px; }
-          .prayer-item { font-size: 10px; }
+      .quran-btn.blue { background: linear-gradient(135deg, #3b82f6, #1d4ed8); box-shadow: 0 4px 20px rgba(59,130,246,0.5); }
+
+        /* СУРЫ */
+      .title { font-size: 28px; font-weight: 800; margin-bottom: 20px; text-align: center; }
+      .surah-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
         }
-    </style>
-</head>
-<body>
-    <div class="bg" id="bg"></div>
-    <header class="header">
-        <div class="logo">Quran MuratX</div>
-        <div class="controls">
-            <button class="btn" id="bgBtn">🕋 Фон 1/5</button>
-            <button class="btn" id="langBtn">Русский</button>
-        </div>
-    </header>
-    <main class="main">
-        <div class="glass">
-            <div class="city" id="city">Алматы, Казахстан</div>
-            <div class="hijri" id="hijriDate"></div>
-            <div class="label" id="prayerLabel">Время до намаза</div>
-            <div class="time" id="timer">00:00:00</div>
-            <div class="next-prayer" id="nextPrayer"></div>
-            <div class="prayer-list" id="prayerList"></div>
-            <a href="https://quran.com" target="_blank" class="quran-btn" id="quranBtn">📖 Читать Коран</a>
-        </div>
-    </main>
-    <script>
-        // ВРЕМЯ НАМАЗА ДЛЯ АЛМАТЫ - ИЮЛЬ 2026
-        var PRAYER_TIMES = {
-            Fajr: '03:45', Sunrise: '05:25', Dhuhr: '13:15',
-            Asr: '17:25', Maghrib: '20:50', Isha: '22:30'
-        };
-
-        var backgrounds = ['./bg1.jpg', './bg2.jpg', './bg3.jpg', './bg4.jpg', './bg5.jpg'];
-        var currentBg = parseInt(localStorage.getItem('bgIndex')) || 0;
-        var bgEl = document.getElementById('bg');
-        var bgBtn = document.getElementById('bgBtn');
-        var langBtn = document.getElementById('langBtn');
-        var timerEl = document.getElementById('timer');
-        var prayerListEl = document.getElementById('prayerList');
-        var hijriEl = document.getElementById('hijriDate');
-
-        function setBackground(index) {
-            bgEl.style.backgroundImage = 'linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url(' + backgrounds[index] + ')';
+      .surah-item {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-align: left;
         }
-        setBackground(currentBg);
-
-        bgBtn.onclick = function() {
-            currentBg = (currentBg + 1) % backgrounds.length;
-            localStorage.setItem('bgIndex', currentBg);
-            setBackground(currentBg);
-            bgBtn.textContent = '🕋 Фон ' + (currentBg + 1) + '/5';
-        };
-
-        var langs = ['ru', 'kz', 'en'];
-        var currentLang = localStorage.getItem('lang') || 'ru';
-
-        var i18n = {
-            ru: { timeTo: 'Время до', quran: '📖 Читать Коран', btn: 'Русский', prayers: { Fajr: 'Фаджр', Sunrise: 'Восход', Dhuhr: 'Зухр', Asr: 'Аср', Maghrib: 'Магриб', Isha: 'Иша' } },
-            kz: { timeTo: 'Уақыт қалды:', quran: '📖 Құран оқу', btn: 'Қазақша', prayers: { Fajr: 'Таң', Sunrise: 'Күншығыс', Dhuhr: 'Бесін', Asr: 'Екінті', Maghrib: 'Ақшам', Isha: 'Құптан' } },
-            en: { timeTo: 'Time until', quran: '📖 Read Quran', btn: 'English', prayers: { Fajr: 'Fajr', Sunrise: 'Sunrise', Dhuhr: 'Dhuhr', Asr: 'Asr', Maghrib: 'Maghrib', Isha: 'Isha' } }
-        };
-
-        function updateUI() {
-            var t = i18n[currentLang];
-            document.getElementById('quranBtn').textContent = t.quran;
-            langBtn.textContent = t.btn;
-            bgBtn.textContent = '🕋 Фон ' + (currentBg + 1) + '/5';
-            updateHijriDate();
-            updateCountdown();
+      .surah-item:hover {
+            background: rgba(16,185,129,0.3);
+            border-color: #10b981;
+            transform: translateY(-2px);
         }
-
-        langBtn.onclick = function() {
-            var idx = langs.indexOf(currentLang);
-            currentLang = langs[(idx + 1) % langs.length];
-            localStorage.setItem('lang', currentLang);
-            renderPrayerList();
-            updateUI();
-        };
-
-        function updateHijriDate() {
-            try {
-                var date = new Date();
-                var hijri = new Intl.DateTimeFormat('ar-TN-u-ca-islamic', { day: 'numeric', month: 'long', year: 'numeric' }).format(date);
-                hijriEl.textContent = hijri;
-            } catch(e) {
-                hijriEl.textContent = '15 Мухаррам 1448';
-            }
+      .surah-num {
+            background: #10b981;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            flex-shrink: 0;
         }
+      .surah-name-ar { font-family: 'Amiri', serif; font-size: 20px; margin-bottom: 4px; }
+      .surah-name-ru { font-size: 14px; opacity: 0.8; }
+      .surah-ayahs { font-size: 12px; opacity: 0.6; }
 
-        function renderPrayerList() {
-            var t = i18n[currentLang];
-            var html = '';
-            var order = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
-            var activePrayer = getNextPrayer().key;
-            for (var i = 0; i < order.length; i++) {
-                var key = order[i];
-                var activeClass = key === activePrayer? 'active' : '';
-                html += '<div class="prayer-item ' + activeClass + '"><div class="prayer-name">' + t.prayers[key] + '</div><div class="prayer-time">' + PRAYER_TIMES[key] + '</div></div>';
-            }
-            prayerListEl.innerHTML = html;
-        }
-
-        function getNextPrayer() {
-            var now = new Date();
-            var order = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
-            for (var i = 0; i < order.length; i++) {
-                var key = order[i];
-                var parts = PRAYER_TIMES[key].split(':');
-                var prayerDate = new Date();
-                prayerDate.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
-                if (prayerDate > now) return { key: key, date: prayerDate };
-            }
-            var parts = PRAYER_TIMES.Fajr.split(':');
-            var prayerDate = new Date();
-            prayerDate.setDate(prayerDate.getDate() + 1);
-            prayerDate.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
-            return { key: 'Fajr', date: prayerDate };
-        }
-
-        function updateCountdown() {
-            var t = i18n[currentLang];
-            var next = getNextPrayer();
-            var now = new Date();
-            var diff = next.date - now;
-            var h = Math.floor(Math.abs(diff) / 3600000);
-            var m = Math.floor((Math.abs(diff) % 3600000) / 60000);
-            var s = Math.floor((Math.abs(diff) % 60000) / 1000);
-
-            document.getElementById('prayerLabel').textContent = t.timeTo + ' ' + t.prayers[next.key];
-            timerEl.textContent = (h < 10? '0' + h : h) + ':' + (m < 10? '0' + m : m) + ':' + (s < 10? '0' + s : s);
-            document.getElementById('nextPrayer').textContent = t.prayers[next.key] + ' ' + PRAYER_TIMES[next.key];
-            renderPrayerList();
-        }
-
-        renderPrayerList();
-        setInterval(updateCountdown, 1000);
-        updateUI();
-    </script>
-</body>
-</html>
+        /* СТРАНИЦА СУРЫ */
+      .surah-header { text-align: center; margin-bottom: 
