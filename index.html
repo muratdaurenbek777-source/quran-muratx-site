@@ -64,14 +64,14 @@
             var timerEl = document.getElementById('timer');
             var cityEl = document.getElementById('city');
             var prayerListEl = document.getElementById('prayerList');
-            
+
             if (!bgEl ||!bgBtn ||!langBtn ||!timerEl) return;
 
             function setBackground(index) {
                 bgEl.style.backgroundImage = 'linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url(' + backgrounds[index] + ')';
                 updateUI();
             }
-            
+
             bgBtn.onclick = function() {
                 currentBg = (currentBg + 1) % backgrounds.length;
                 localStorage.setItem('bgIndex', currentBg);
@@ -80,11 +80,11 @@
 
             var langs = ['ru', 'kz', 'en'];
             var currentLang = localStorage.getItem('lang') || 'ru';
-            
+
             var i18n = {
-                ru: { city: 'Город', timeTo: 'Время до', bg: 'Фон', quran: '📖 Читать Коран', btn: 'Русский', prayers: { Fajr: 'Фаджр', Sunrise: 'Восход', Dhuhr: 'Зухр', Asr: 'Аср', Maghrib: 'Магриб', Isha: 'Иша' }, loading: 'Загружаем время намаза...', location: 'Определяем город...' },
-                kz: { city: 'Қала', timeTo: 'Уақыт қалды:', bg: 'Фон', quran: '📖 Құран оқу', btn: 'Қазақша', prayers: { Fajr: 'Таң', Sunrise: 'Күншығыс', Dhuhr: 'Бесін', Asr: 'Екінті', Maghrib: 'Ақшам', Isha: 'Құптан' }, loading: 'Намаз уақытын жүктеу...', location: 'Қаланы анықтау...' },
-                en: { city: 'City', timeTo: 'Time until', bg: 'Bg', quran: '📖 Read Quran', btn: 'English', prayers: { Fajr: 'Fajr', Sunrise: 'Sunrise', Dhuhr: 'Dhuhr', Asr: 'Asr', Maghrib: 'Maghrib', Isha: 'Isha' }, loading: 'Loading prayer times...', location: 'Detecting city...' }
+                ru: { city: 'Город', timeTo: 'Время до', bg: 'Фон', quran: '📖 Читать Коран', btn: 'Русский', prayers: { Fajr: 'Фаджр', Sunrise: 'Восход', Dhuhr: 'Зухр', Asr: 'Аср', Maghrib: 'Магриб', Isha: 'Иша' }, loading: 'Загружаем время намаза...', location: 'Определяем город...', error: 'Ошибка загрузки' },
+                kz: { city: 'Қала', timeTo: 'Уақыт қалды:', bg: 'Фон', quran: '📖 Құран оқу', btn: 'Қазақша', prayers: { Fajr: 'Таң', Sunrise: 'Күншығыс', Dhuhr: 'Бесін', Asr: 'Екінті', Maghrib: 'Ақшам', Isha: 'Құптан' }, loading: 'Намаз уақытын жүктеу...', location: 'Қаланы анықтау...', error: 'Жүктеу қатесі' },
+                en: { city: 'City', timeTo: 'Time until', bg: 'Bg', quran: '📖 Read Quran', btn: 'English', prayers: { Fajr: 'Fajr', Sunrise: 'Sunrise', Dhuhr: 'Dhuhr', Asr: 'Asr', Maghrib: 'Maghrib', Isha: 'Isha' }, loading: 'Loading prayer times...', location: 'Detecting city...', error: 'Loading error' }
             };
 
             var prayerTimes = {};
@@ -119,3 +119,122 @@
                     var key = order[i];
                     var activeClass = key === activePrayer? 'active' : '';
                     html += '<div class="prayer-item ' + activeClass + '"><div class="prayer-name">' + t.prayers[key] + '</div><div class="prayer-time">' + prayerTimes[key] + '</div></div>';
+                }
+                prayerListEl.innerHTML = html;
+            }
+
+            function getNextPrayer() {
+                var now = new Date();
+                var order = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+                for (var i = 0; i < order.length; i++) {
+                    var key = order[i];
+                    if (!prayerTimes[key]) continue;
+                    var parts = prayerTimes[key].split(':');
+                    var prayerDate = new Date();
+                    prayerDate.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
+                    if (prayerDate > now) return { key: key, date: prayerDate };
+                }
+                var parts = prayerTimes.Fajr.split(':');
+                var prayerDate = new Date();
+                prayerDate.setDate(prayerDate.getDate() + 1);
+                prayerDate.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
+                return { key: 'Fajr', date: prayerDate };
+            }
+
+            function updateCountdown() {
+                var t = i18n[currentLang];
+                if (!prayerTimes.Fajr) return;
+
+                var next = getNextPrayer();
+                var now = new Date();
+                var diff = next.date - now;
+                var h = Math.floor(diff / 3600000);
+                var m = Math.floor((diff % 3600000) / 60000);
+                var s = Math.floor((diff % 60000) / 1000);
+
+                document.getElementById('prayerLabel').textContent = t.timeTo + ' ' + t.prayers[next.key];
+                timerEl.textContent =
+                    (h < 10? '0' + h : h) + ':' +
+                    (m < 10? '0' + m : m) + ':' +
+                    (s < 10? '0' + s : s);
+                document.getElementById('nextPrayer').textContent = t.prayers[next.key] + ' ' + prayerTimes[next.key];
+                renderPrayerList();
+            }
+
+            function setFallbackTimes() {
+                console.log('Используем запасное время для Алматы');
+                cityEl.textContent = 'Алматы, Казахстан';
+                prayerTimes = { Fajr: '05:30', Sunrise: '07:00', Dhuhr: '12:30', Asr: '15:45', Maghrib: '18:15', Isha: '19:45' };
+                localStorage.setItem('prayerTimes', JSON.stringify(prayerTimes));
+                localStorage.setItem('city', 'Алматы');
+                renderPrayerList();
+                updateCountdown();
+            }
+
+            function fetchPrayerTimes(lat, lon) {
+                console.log('Запрашиваем время для:', lat, lon);
+                var url = 'https://api.aladhan.com/v1/timings?latitude=' + lat + '&longitude=' + lon + '&method=2';
+                fetch(url).then(function(r) {
+                    console.log('Ответ API:', r.status);
+                    return r.json();
+                }).then(function(data) {
+                    console.log('Данные:', data);
+                    if (data.code === 200) {
+                        var times = data.data.timings;
+                        prayerTimes = {
+                            Fajr: times.Fajr,
+                            Sunrise: times.Sunrise,
+                            Dhuhr: times.Dhuhr,
+                            Asr: times.Asr,
+                            Maghrib: times.Maghrib,
+                            Isha: times.Isha
+                        };
+                        currentCity = data.data.meta.timezone.split('/')[1].replace('_', ' ');
+                        cityEl.textContent = currentCity;
+                        localStorage.setItem('prayerTimes', JSON.stringify(prayerTimes));
+                        localStorage.setItem('city', currentCity);
+                        renderPrayerList();
+                        updateCountdown();
+                    } else {
+                        setFallbackTimes();
+                    }
+                }).catch(function(e) {
+                    console.error('Ошибка API:', e);
+                    setFallbackTimes();
+                });
+            }
+
+            function getLocation() {
+                var t = i18n[currentLang];
+                cityEl.textContent = t.location;
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function(pos) {
+                        fetchPrayerTimes(pos.coords.latitude, pos.coords.longitude);
+                    }, function(err) {
+                        console.log('Геолокация отклонена:', err);
+                        fetchPrayerTimes(43.2220, 76.8512); // Алматы по умолчанию
+                    });
+                } else {
+                    fetchPrayerTimes(43.2220, 76.8512);
+                }
+            }
+
+            cityEl.onclick = getLocation;
+
+            var cachedTimes = localStorage.getItem('prayerTimes');
+            var cachedCity = localStorage.getItem('city');
+            if (cachedTimes) {
+                prayerTimes = JSON.parse(cachedTimes);
+                cityEl.textContent = cachedCity || 'Алматы';
+                renderPrayerList();
+                updateCountdown();
+            }
+
+            setInterval(updateCountdown, 1000);
+            setBackground(currentBg);
+            updateUI();
+            getLocation();
+        });
+    </script>
+</body>
+</html>
