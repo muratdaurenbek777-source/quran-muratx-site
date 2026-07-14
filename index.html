@@ -14,7 +14,7 @@
             overflow: hidden;
             background: linear-gradient(135deg, #0f172a, #1e293b);
         }
-       .bg {
+      .bg {
             position: fixed;
             top: 0;
             left: 0;
@@ -24,7 +24,7 @@
             z-index: -1;
             transition: 0.5s ease-in-out;
         }
-       .header {
+      .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -33,9 +33,9 @@
             backdrop-filter: blur(15px);
             border-bottom: 1px solid rgba(255,255,255,0.15);
         }
-       .logo { font-size: 24px; font-weight: 800; }
-       .controls { display: flex; gap: 12px; }
-       .btn {
+      .logo { font-size: 24px; font-weight: 800; }
+      .controls { display: flex; gap: 12px; }
+      .btn {
             background: rgba(255,255,255,0.2);
             border: 1px solid rgba(255,255,255,0.4);
             color: white;
@@ -47,8 +47,8 @@
             transition: 0.3s;
             font-family: inherit;
         }
-       .btn:hover { background: rgba(255,255,255,0.3); }
-       .main {
+      .btn:hover { background: rgba(255,255,255,0.3); }
+      .main {
             text-align: center;
             padding: 20px;
             height: calc(100vh - 81px);
@@ -56,7 +56,7 @@
             align-items: center;
             justify-content: center;
         }
-       .glass {
+      .glass {
             background: rgba(0,0,0,0.4);
             padding: 30px 35px;
             border-radius: 24px;
@@ -66,12 +66,12 @@
             max-width: 550px;
             width: 100%;
         }
-       .city { font-size: 18px; font-weight: 300; opacity: 0.9; margin-bottom: 8px; }
-       .hijri { font-size: 14px; opacity: 0.7; margin-bottom: 16px; }
-       .label { font-size: 16px; font-weight: 300; opacity: 0.8; margin-bottom: 16px; }
-       .time { font-size: 72px; font-weight: 800; letter-spacing: 2px; line-height: 1; margin-bottom: 10px; }
-       .next-prayer { font-size: 14px; opacity: 0.7; margin-bottom: 20px; }
-       .prayer-list {
+      .city { font-size: 18px; font-weight: 300; opacity: 0.9; margin-bottom: 8px; }
+      .hijri { font-size: 14px; opacity: 0.7; margin-bottom: 16px; }
+      .label { font-size: 16px; font-weight: 300; opacity: 0.8; margin-bottom: 16px; }
+      .time { font-size: 72px; font-weight: 800; letter-spacing: 2px; line-height: 1; margin-bottom: 10px; }
+      .next-prayer { font-size: 14px; opacity: 0.7; margin-bottom: 20px; }
+      .prayer-list {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
             gap: 8px;
@@ -79,12 +79,12 @@
             padding-top: 15px;
             border-top: 1px solid rgba(255,255,255,0.15);
         }
-       .prayer-item { font-size: 11px; }
-       .prayer-name { opacity: 0.7; margin-bottom: 4px; }
-       .prayer-time { font-weight: 600; }
-       .prayer-item.active { color: #10b981; }
-       .prayer-item.active.prayer-time { font-weight: 800; }
-       .quran-btn {
+      .prayer-item { font-size: 11px; }
+      .prayer-name { opacity: 0.7; margin-bottom: 4px; }
+      .prayer-time { font-weight: 600; }
+      .prayer-item.active { color: #10b981; }
+      .prayer-item.active.prayer-time { font-weight: 800; }
+      .quran-btn {
             background: linear-gradient(135deg, #10b981, #059669);
             border: none;
             color: white;
@@ -98,14 +98,101 @@
             text-decoration: none;
             display: inline-block;
             font-family: inherit;
+            margin-bottom: 15px;
         }
-       .quran-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(16,185,129,0.7); }
+      .quran-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(16,185,129,0.7); }
+      .qibla-btn {
+            background: rgba(16,185,129,0.3);
+            border: 1px solid #10b981;
+            color: white;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: inherit;
+       }
+      .qibla-btn:hover { background: rgba(16,185,129,0.5); }
+      .compass-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+       }
+      .compass-modal.show { display: flex; }
+      .compass-box {
+            background: rgba(0,0,0,0.6);
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.25);
+            text-align: center;
+            position: relative;
+       }
+      .compass {
+            width: 250px;
+            height: 250px;
+            margin: 20px auto;
+            position: relative;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,0,0,0.4), transparent);
+       }
+      .compass-arrow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 4px;
+            height: 100px;
+            background: linear-gradient(to top, #10b981, #059669);
+            transform-origin: bottom center;
+            transform: translate(-50%, -100%) rotate(0deg);
+            transition: transform 0.3s;
+            border-radius: 4px;
+       }
+      .compass-arrow::after {
+            content: '🕋';
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 28px;
+       }
+      .compass-n {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: 800;
+            font-size: 20px;
+       }
+      .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+       }
         @media (max-width: 600px) {
-           .time { font-size: 48px; }
-           .glass { padding: 20px 15px; margin: 0 15px; }
-           .header { padding: 15px 20px; }
-           .prayer-list { grid-template-columns: repeat(3, 1fr); gap: 10px; }
-           .prayer-item { font-size: 10px; }
+          .time { font-size: 48px; }
+          .glass { padding: 20px 15px; margin: 0 15px; }
+          .header { padding: 15px 20px; }
+          .prayer-list { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+          .prayer-item { font-size: 10px; }
+          .compass { width: 200px; height: 200px; }
         }
     </style>
 </head>
@@ -127,14 +214,32 @@
             <div class="next-prayer" id="nextPrayer"></div>
             <div class="prayer-list" id="prayerList"></div>
             <a href="https://quran.com" target="_blank" class="quran-btn" id="quranBtn">📖 Читать Коран</a>
+            <br>
+            <button class="qibla-btn" id="qiblaBtn">🧭 Показать Киблу</button>
         </div>
     </main>
+
+    <div class="compass-modal" id="compassModal">
+        <div class="compass-box">
+            <button class="close-btn" id="closeCompass">✕</button>
+            <h3 style="margin-bottom: 10px;">Направление на Киблу 🕋</h3>
+            <p style="opacity: 0.7; font-size: 14px; margin-bottom: 15px;" id="qiblaText">Поворачивай телефон</p>
+            <div class="compass">
+                <div class="compass-n">N</div>
+                <div class="compass-arrow" id="qiblaArrow"></div>
+            </div>
+            <p style="opacity: 0.6; font-size: 12px; margin-top: 15px;" id="qiblaDegrees"></p>
+        </div>
+    </div>
+
     <script>
-        // ВРЕМЯ НАМАЗА ДЛЯ АЛМАТЫ - ИЮЛЬ 2026
         var PRAYER_TIMES = {
             Fajr: '03:45', Sunrise: '05:25', Dhuhr: '13:15',
             Asr: '17:25', Maghrib: '20:50', Isha: '22:30'
         };
+
+        var MAKKAH = { lat: 21.4225, lon: 39.8262 };
+        var userLocation = { lat: 43.2220, lon: 76.8512 }; // Алматы
 
         var backgrounds = ['./bg1.jpg', './bg2.jpg', './bg3.jpg', './bg4.jpg', './bg5.jpg'];
         var currentBg = parseInt(localStorage.getItem('bgIndex')) || 0;
@@ -144,6 +249,12 @@
         var timerEl = document.getElementById('timer');
         var prayerListEl = document.getElementById('prayerList');
         var hijriEl = document.getElementById('hijriDate');
+        var qiblaBtn = document.getElementById('qiblaBtn');
+        var compassModal = document.getElementById('compassModal');
+        var closeCompass = document.getElementById('closeCompass');
+        var qiblaArrow = document.getElementById('qiblaArrow');
+        var qiblaText = document.getElementById('qiblaText');
+        var qiblaDegrees = document.getElementById('qiblaDegrees');
 
         function setBackground(index) {
             bgEl.style.backgroundImage = 'linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url(' + backgrounds[index] + ')';
@@ -236,6 +347,55 @@
             timerEl.textContent = (h < 10? '0' + h : h) + ':' + (m < 10? '0' + m : m) + ':' + (s < 10? '0' + s : s);
             document.getElementById('nextPrayer').textContent = t.prayers[next.key] + ' ' + PRAYER_TIMES[next.key];
             renderPrayerList();
+        }
+
+        // QIBLA COMPASS
+        function calculateQibla(lat, lon) {
+            var phi1 = lat * Math.PI / 180;
+            var phi2 = MAKKAH.lat * Math.PI / 180;
+            var delta = (MAKKAH.lon - lon) * Math.PI / 180;
+            var y = Math.sin(delta);
+            var x = Math.cos(phi1) * Math.tan(phi2) - Math.sin(phi1) * Math.cos(delta);
+            var qibla = Math.atan2(y, x) * 180 / Math.PI;
+            return (qibla + 360) % 360;
+        }
+
+        qiblaBtn.onclick = function() {
+            compassModal.classList.add('show');
+            if (window.DeviceOrientationEvent) {
+                if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                    DeviceOrientationEvent.requestPermission().then(perm => {
+                        if (perm === 'granted') startQibla();
+                    });
+                } else {
+                    startQibla();
+                }
+            } else {
+                qiblaText.textContent = 'Компас не поддерживается на этом устройстве';
+            }
+        };
+
+        closeCompass.onclick = function() {
+            compassModal.classList.remove('show');
+        };
+
+        function startQibla() {
+            qiblaText.textContent = 'Поворачивай телефон...';
+            navigator.geolocation.getCurrentPosition(pos => {
+                userLocation = { lat: pos.coords.latitude, lon: pos.coords.longitude };
+                var qiblaAngle = calculateQibla(userLocation.lat, userLocation.lon);
+                qiblaDegrees.textContent = 'Направление: ' + Math.round(qiblaAngle) + '°';
+
+                window.addEventListener('deviceorientation', e => {
+                    var heading = e.webkitCompassHeading || Math.abs(e.alpha - 360);
+                    var rotation = qiblaAngle - heading;
+                    qiblaArrow.style.transform = `translate(-50%, -100%) rotate(${rotation}deg)`;
+                });
+            }, err => {
+                qiblaText.textContent = 'Разреши геолокацию для точного направления';
+                var qiblaAngle = calculateQibla(userLocation.lat, userLocation.lon);
+                qiblaDegrees.textContent = 'Примерно: ' + Math.round(qiblaAngle) + '° (Алматы)';
+            });
         }
 
         renderPrayerList();
