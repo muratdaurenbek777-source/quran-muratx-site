@@ -35,8 +35,9 @@ body.light.bg { background: linear-gradient(135deg, #e0f2fe, #bae6fd); }
 .btn:hover { opacity: 0.8; }
 .main { text-align: center; padding: 20px; height: calc(100vh - 81px); display: flex; align-items: center; justify-content: center; }
 .glass { background: var(--glass-bg); padding: 30px 35px; border-radius: 24px; backdrop-filter: blur(20px); border: 1px solid var(--border-color); box-shadow: 0 8px 32px rgba(0,0,0,0.3); max-width: 550px; width: 100%; transition: 0.3s; }
-.city { font-size: 18px; font-weight: 300; opacity: 0.9; margin-bottom: 8px; cursor: pointer; }
-.city:hover { text-decoration: underline; }
+.city-wrap { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 8px; }
+.city { font-size: 18px; font-weight: 300; opacity: 0.9; }
+.refresh-btn { background: var(--btn-bg); border: 1px solid var(--btn-border); color: var(--text-color); padding: 4px 10px; border-radius: 8px; cursor: pointer; font-size: 14px; }
 .label { font-size: 16px; font-weight: 300; opacity: 0.8; margin-bottom: 16px; }
 .time { font-size: 72px; font-weight: 800; letter-spacing: 2px; line-height: 1; margin-bottom: 10px; }
 .next-prayer { font-size: 14px; opacity: 0.7; margin-bottom: 20px; }
@@ -65,7 +66,10 @@ body.light.bg { background: linear-gradient(135deg, #e0f2fe, #bae6fd); }
     </header>
     <main class="main">
         <div class="glass">
-            <div class="city" id="city" title="Нажми чтобы обновить">Определяем город...</div>
+            <div class="city-wrap">
+                <div class="city" id="city">Определяем город...</div>
+                <button class="refresh-btn" id="refreshBtn" title="Обновить город">📍</button>
+            </div>
             <div class="label" id="prayerLabel">Время до намаза</div>
             <div class="time" id="timer">00:00:00</div>
             <div class="next-prayer" id="nextPrayer">Загрузка...</div>
@@ -89,11 +93,13 @@ body.light.bg { background: linear-gradient(135deg, #e0f2fe, #bae6fd); }
             var langBtn = document.getElementById('langBtn');
             var soundBtn = document.getElementById('soundBtn');
             var themeBtn = document.getElementById('themeBtn');
+            var refreshBtn = document.getElementById('refreshBtn');
             var timerEl = document.getElementById('timer');
             var cityEl = document.getElementById('city');
             var prayerListEl = document.getElementById('prayerList');
             var azanAudio = document.getElementById('azanAudio');
             var lastPlayedPrayer = '';
+            var geoTimeout;
 
             if (theme === 'light') document.body.classList.add('light');
             updateThemeBtn();
@@ -104,9 +110,6 @@ body.light.bg { background: linear-gradient(135deg, #e0f2fe, #bae6fd); }
                 var img = new Image();
                 img.onload = function() {
                     bgEl.style.backgroundImage = 'linear-gradient(var(--bg-overlay), var(--bg-overlay)), url(' + backgrounds[index] + ')';
-                };
-                img.onerror = function() {
-                    console.log('Картинка ' + backgrounds[index] + ' не найдена. Используем градиент.');
                 };
                 img.src = backgrounds[index];
                 updateUI();
@@ -145,4 +148,92 @@ body.light.bg { background: linear-gradient(135deg, #e0f2fe, #bae6fd); }
             var currentLang = localStorage.getItem('lang') || 'ru';
 
             var i18n = {
-                ru: { city: 'Город', timeTo: 'Время до', bg: 'Фон', quran: '📖 Читать Коран', btn: 'RU', prayers: { Fajr: 'Фаджр', Sunrise: 'Восход', Dhuhr: 'Зухр', As
+                ru: { city: 'Город', timeTo: 'Время до', bg: 'Фон', quran: '📖 Читать Коран', btn: 'RU', prayers: { Fajr: 'Фаджр', Sunrise: 'Восход', Dhuhr: 'Зухр', Asr: 'Аср', Maghrib: 'Магриб', Isha: 'Иша' }, loading: 'Загружаем время намаза...', location: 'Определяем город...', error: 'Ошибка загрузки' },
+                kz: { city: 'Қала', timeTo: 'Уақыт қалды:', bg: 'Фон', quran: '📖 Құран оқу', btn: 'KZ', prayers: { Fajr: 'Таң', Sunrise: 'Күншығыс', Dhuhr: 'Бесін', Asr: 'Екінті', Maghrib: 'Ақшам', Isha: 'Құптан' }, loading: 'Намаз уақытын жүктеу...', location: 'Қаланы анықтау...', error: 'Жүктеу қатесі' },
+                en: { city: 'City', timeTo: 'Time until', bg: 'Bg', quran: '📖 Read Quran', btn: 'EN', prayers: { Fajr: 'Fajr', Sunrise: 'Sunrise', Dhuhr: 'Dhuhr', Asr: 'Asr', Maghrib: 'Maghrib', Isha: 'Isha' }, loading: 'Loading prayer times...', location: 'Detecting city...', error: 'Loading error' }
+            };
+
+            var prayerTimes = {};
+            var currentCity = 'Almaty';
+
+            function updateUI() {
+                var t = i18n[currentLang];
+                document.getElementById('quranBtn').textContent = t.quran;
+                langBtn.textContent = t.btn;
+                bgBtn.textContent = '🕋 ' + (currentBg + 1) + '/5';
+                updateCountdown();
+            }
+
+            langBtn.onclick = function() {
+                var idx = langs.indexOf(currentLang);
+                currentLang = langs[(idx + 1) % langs.length];
+                localStorage.setItem('lang', currentLang);
+                renderPrayerList();
+                updateUI();
+            };
+
+            function renderPrayerList() {
+                var t = i18n[currentLang];
+                if (!prayerTimes.Fajr) {
+                    prayerListEl.innerHTML = '<div class="loading">' + t.loading + '</div>';
+                    return;
+                }
+                var html = '';
+                var order = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+                var activePrayer = getNextPrayer().key;
+                for (var i = 0; i < order.length; i++) {
+                    var key = order[i];
+                    var activeClass = key === activePrayer? 'active' : '';
+                    html += '<div class="prayer-item ' + activeClass + '"><div class="prayer-name">' + t.prayers[key] + '</div><div class="prayer-time">' + prayerTimes[key] + '</div></div>';
+                }
+                prayerListEl.innerHTML = html;
+            }
+
+            function getNextPrayer() {
+                var now = new Date();
+                var order = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+                for (var i = 0; i < order.length; i++) {
+                    var key = order[i];
+                    if (!prayerTimes[key]) continue;
+                    var parts = prayerTimes[key].split(':');
+                    var prayerDate = new Date();
+                    prayerDate.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
+                    if (prayerDate > now) return { key: key, date: prayerDate };
+                }
+                var parts = prayerTimes.Fajr.split(':');
+                var prayerDate = new Date();
+                prayerDate.setDate(prayerDate.getDate() + 1);
+                prayerDate.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
+                return { key: 'Fajr', date: prayerDate };
+            }
+
+            function playAzan(prayerKey) {
+                if (!soundEnabled || prayerKey === 'Sunrise' || lastPlayedPrayer === prayerKey) return;
+                lastPlayedPrayer = prayerKey;
+                azanAudio.play().catch(function(e) { console.log('Звук заблокирован. Кликни по странице'); });
+            }
+
+            function updateCountdown() {
+                var t = i18n[currentLang];
+                if (!prayerTimes.Fajr) return;
+
+                var next = getNextPrayer();
+                var now = new Date();
+                var diff = next.date - now;
+
+                if (diff <= 1000 && diff > -1000) playAzan(next.key);
+
+                var h = Math.floor(Math.abs(diff) / 3600000);
+                var m = Math.floor((Math.abs(diff) % 3600000) / 60000);
+                var s = Math.floor((Math.abs(diff) % 60000) / 1000);
+
+                document.getElementById('prayerLabel').textContent = t.timeTo + ' ' + t.prayers[next.key];
+                timerEl.textContent =
+                    (h < 10? '0' + h : h) + ':' +
+                    (m < 10? '0' + m : m) + ':' +
+                    (s < 10? '0' + s : s);
+                document.getElementById('nextPrayer').textContent = t.prayers[next.key] + ' ' + prayerTimes[next.key];
+                renderPrayerList();
+            }
+
+            function setFallbackTimes() {
