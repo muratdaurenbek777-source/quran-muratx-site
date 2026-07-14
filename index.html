@@ -35,9 +35,9 @@ body.light.bg { background: linear-gradient(135deg, #e0f2fe, #bae6fd); }
 .btn:hover { opacity: 0.8; }
 .main { text-align: center; padding: 20px; height: calc(100vh - 81px); display: flex; align-items: center; justify-content: center; }
 .glass { background: var(--glass-bg); padding: 30px 35px; border-radius: 24px; backdrop-filter: blur(20px); border: 1px solid var(--border-color); box-shadow: 0 8px 32px rgba(0,0,0,0.3); max-width: 550px; width: 100%; transition: 0.3s; }
-.city-wrap { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 8px; }
-.city { font-size: 18px; font-weight: 300; opacity: 0.9; }
-.refresh-btn { background: var(--btn-bg); border: 1px solid var(--btn-border); color: var(--text-color); padding: 4px 10px; border-radius: 8px; cursor: pointer; font-size: 14px; }
+.city-wrap { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px; }
+.city { font-size: 18px; font-weight: 300; opacity: 0.9; cursor: pointer; }
+.city:hover { text-decoration: underline; }
 .label { font-size: 16px; font-weight: 300; opacity: 0.8; margin-bottom: 16px; }
 .time { font-size: 72px; font-weight: 800; letter-spacing: 2px; line-height: 1; margin-bottom: 10px; }
 .next-prayer { font-size: 14px; opacity: 0.7; margin-bottom: 20px; }
@@ -67,8 +67,8 @@ body.light.bg { background: linear-gradient(135deg, #e0f2fe, #bae6fd); }
     <main class="main">
         <div class="glass">
             <div class="city-wrap">
-                <div class="city" id="city">Определяем город...</div>
-                <button class="refresh-btn" id="refreshBtn" title="Обновить город">📍</button>
+                <div class="city" id="city" title="Нажми чтобы выбрать город">Алматы, Казахстан</div>
+                <button class="btn" id="locationBtn" style="padding: 4px 8px; font-size: 14px;">📍</button>
             </div>
             <div class="label" id="prayerLabel">Время до намаза</div>
             <div class="time" id="timer">00:00:00</div>
@@ -93,7 +93,7 @@ body.light.bg { background: linear-gradient(135deg, #e0f2fe, #bae6fd); }
             var langBtn = document.getElementById('langBtn');
             var soundBtn = document.getElementById('soundBtn');
             var themeBtn = document.getElementById('themeBtn');
-            var refreshBtn = document.getElementById('refreshBtn');
+            var locationBtn = document.getElementById('locationBtn');
             var timerEl = document.getElementById('timer');
             var cityEl = document.getElementById('city');
             var prayerListEl = document.getElementById('prayerList');
@@ -110,6 +110,9 @@ body.light.bg { background: linear-gradient(135deg, #e0f2fe, #bae6fd); }
                 var img = new Image();
                 img.onload = function() {
                     bgEl.style.backgroundImage = 'linear-gradient(var(--bg-overlay), var(--bg-overlay)), url(' + backgrounds[index] + ')';
+                };
+                img.onerror = function() {
+                    console.log('Картинка не найдена. Градиент.');
                 };
                 img.src = backgrounds[index];
                 updateUI();
@@ -154,7 +157,7 @@ body.light.bg { background: linear-gradient(135deg, #e0f2fe, #bae6fd); }
             };
 
             var prayerTimes = {};
-            var currentCity = 'Almaty';
+            var currentCity = 'Алматы';
 
             function updateUI() {
                 var t = i18n[currentLang];
@@ -232,8 +235,4 @@ body.light.bg { background: linear-gradient(135deg, #e0f2fe, #bae6fd); }
                     (h < 10? '0' + h : h) + ':' +
                     (m < 10? '0' + m : m) + ':' +
                     (s < 10? '0' + s : s);
-                document.getElementById('nextPrayer').textContent = t.prayers[next.key] + ' ' + prayerTimes[next.key];
-                renderPrayerList();
-            }
-
-            function setFallbackTimes() {
+                document.getElementById('nextPrayer').textContent = t.p
