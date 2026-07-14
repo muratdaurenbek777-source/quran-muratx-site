@@ -457,4 +457,19 @@
             } else if (tab === 'ar') {
                 document.querySelectorAll('.ayah-ar').forEach(el => el.classList.remove('hidden'));
             } else if (tab === 'tr') {
-                document.querySelectorAll('.ayah-tr').forEach(el => el.classList.remove
+                document.querySelectorAll('.ayah-tr').forEach(el => el.classList.remove('hidden'));
+            } else if (tab === 'ru') {
+                document.querySelectorAll('.ayah-ru').forEach(el => el.classList.remove('hidden'));
+            }
+        }
+
+        // СТАРТ
+        document.getElementById('langBtn').textContent = i18n[currentLang].btn;
+        document.getElementById('bgBtn').textContent = '🕋 ' + (currentBg + 1) + '/5';
+        updateHijriDate();
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+        renderPrayerList();
+    </script>
+</body>
+</html>
