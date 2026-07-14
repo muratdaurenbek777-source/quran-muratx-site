@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quran Murat yf Muratx</title>
+    <title>Quran MuratX</title>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -26,7 +26,8 @@
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Manrope', sans-serif; height: 100vh; color: var(--text-color); overflow: hidden; transition: color 0.3s; }
-.bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(var(--bg-overlay), var(--bg-overlay)), url('./bg1.jpg') center/cover no-repeat; z-index: -1; transition: 0.5s ease-in-out; }
+.bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #0f172a, #1e293b); z-index: -1; transition: 0.5s ease-in-out; }
+body.light.bg { background: linear-gradient(135deg, #e0f2fe, #bae6fd); }
 .header { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: var(--header-bg); backdrop-filter: blur(15px); border-bottom: 1px solid var(--border-color); transition: 0.3s; }
 .logo { font-size: 24px; font-weight: 800; }
 .controls { display: flex; gap: 12px; }
@@ -54,7 +55,7 @@
 <body>
     <div class="bg" id="bg"></div>
     <header class="header">
-        <div class="logo">Quran Murat yf Muratx</div>
+        <div class="logo">Quran MuratX</div>
         <div class="controls">
             <button class="btn" id="themeBtn">🌙</button>
             <button class="btn" id="soundBtn">🔔</button>
@@ -99,15 +100,22 @@
 
             if (!bgEl ||!bgBtn ||!langBtn ||!timerEl) return;
 
-            function setBackground(index) {
-                bgEl.style.backgroundImage = 'linear-gradient(var(--bg-overlay), var(--bg-overlay)), url(' + backgrounds[index] + ')';
+            function trySetBackground(index) {
+                var img = new Image();
+                img.onload = function() {
+                    bgEl.style.backgroundImage = 'linear-gradient(var(--bg-overlay), var(--bg-overlay)), url(' + backgrounds[index] + ')';
+                };
+                img.onerror = function() {
+                    console.log('Картинка ' + backgrounds[index] + ' не найдена. Используем градиент.');
+                };
+                img.src = backgrounds[index];
                 updateUI();
             }
 
             bgBtn.onclick = function() {
                 currentBg = (currentBg + 1) % backgrounds.length;
                 localStorage.setItem('bgIndex', currentBg);
-                setBackground(currentBg);
+                trySetBackground(currentBg);
             };
 
             soundBtn.onclick = function() {
@@ -137,4 +145,4 @@
             var currentLang = localStorage.getItem('lang') || 'ru';
 
             var i18n = {
-                ru: { city: 'Город', timeTo: 'Время до', bg: 'Фон', quran: '📖 Читать Коран', btn: 'RU', prayers: { Fajr: 'Фа
+                ru: { city: 'Город', timeTo: 'Время до', bg: 'Фон', quran: '📖 Читать Коран', btn: 'RU', prayers: { Fajr: 'Фаджр', Sunrise: 'Восход', Dhuhr: 'Зухр', As
