@@ -166,4 +166,81 @@
             en: { timeTo: 'Time until', quran: '📖 Read Quran', btn: 'English', prayers: { Fajr: 'Fajr', Sunrise: 'Sunrise', Dhuhr: 'Dhuhr', Asr: 'Asr', Maghrib: 'Maghrib', Isha: 'Isha' } }
         };
 
-        function updateUI
+        function updateUI() {
+            var t = i18n[currentLang];
+            document.getElementById('quranBtn').textContent = t.quran;
+            langBtn.textContent = t.btn;
+            bgBtn.textContent = '🕋 Фон ' + (currentBg + 1) + '/5';
+            updateHijriDate();
+            updateCountdown();
+        }
+
+        langBtn.onclick = function() {
+            var idx = langs.indexOf(currentLang);
+            currentLang = langs[(idx + 1) % langs.length];
+            localStorage.setItem('lang', currentLang);
+            renderPrayerList();
+            updateUI();
+        };
+
+        function updateHijriDate() {
+            try {
+                var date = new Date();
+                var hijri = new Intl.DateTimeFormat('ar-TN-u-ca-islamic', { day: 'numeric', month: 'long', year: 'numeric' }).format(date);
+                hijriEl.textContent = hijri;
+            } catch(e) {
+                hijriEl.textContent = '15 Мухаррам 1448';
+            }
+        }
+
+        function renderPrayerList() {
+            var t = i18n[currentLang];
+            var html = '';
+            var order = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+            var activePrayer = getNextPrayer().key;
+            for (var i = 0; i < order.length; i++) {
+                var key = order[i];
+                var activeClass = key === activePrayer? 'active' : '';
+                html += '<div class="prayer-item ' + activeClass + '"><div class="prayer-name">' + t.prayers[key] + '</div><div class="prayer-time">' + PRAYER_TIMES[key] + '</div></div>';
+            }
+            prayerListEl.innerHTML = html;
+        }
+
+        function getNextPrayer() {
+            var now = new Date();
+            var order = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+            for (var i = 0; i < order.length; i++) {
+                var key = order[i];
+                var parts = PRAYER_TIMES[key].split(':');
+                var prayerDate = new Date();
+                prayerDate.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
+                if (prayerDate > now) return { key: key, date: prayerDate };
+            }
+            var parts = PRAYER_TIMES.Fajr.split(':');
+            var prayerDate = new Date();
+            prayerDate.setDate(prayerDate.getDate() + 1);
+            prayerDate.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
+            return { key: 'Fajr', date: prayerDate };
+        }
+
+        function updateCountdown() {
+            var t = i18n[currentLang];
+            var next = getNextPrayer();
+            var now = new Date();
+            var diff = next.date - now;
+            var h = Math.floor(Math.abs(diff) / 3600000);
+            var m = Math.floor((Math.abs(diff) % 3600000) / 60000);
+            var s = Math.floor((Math.abs(diff) % 60000) / 1000);
+
+            document.getElementById('prayerLabel').textContent = t.timeTo + ' ' + t.prayers[next.key];
+            timerEl.textContent = (h < 10? '0' + h : h) + ':' + (m < 10? '0' + m : m) + ':' + (s < 10? '0' + s : s);
+            document.getElementById('nextPrayer').textContent = t.prayers[next.key] + ' ' + PRAYER_TIMES[next.key];
+            renderPrayerList();
+        }
+
+        renderPrayerList();
+        setInterval(updateCountdown, 1000);
+        updateUI();
+    </script>
+</body>
+</html>
