@@ -402,6 +402,102 @@
         renderPrayerList();
         setInterval(updateCountdown, 1000);
         updateUI();
-    </script>
+        // QIBLA COMPASS — ФИКС ДЛЯ ANDROID
+    function calculateQibla(lat, lon) {
+        var phi1 = lat * Math.PI / 180;
+        var phi2 = MAKKAH.lat * Math.PI / 180;
+        var delta = (MAKKAH.lon - lon) * Math.PI / 180;
+        var y = Math.sin(delta);
+        var x = Math.cos(phi1) * Math.tan(phi2) - Math.sin(phi1) * Math.cos(delta);
+        var qibla = Math.atan2(y, x) * 180 / Math.PI;
+        return (qibla + 360) % 360;
+    }
+
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+        var R = 6371;
+        var dLat = (lat2 - lat1) * Math.PI / 180;
+        var dLon = (lon2 - lon1) * Math.PI / 180;
+        var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return Math.round(R * c);
+    }
+
+    qiblaBtn.onclick = function() {
+        var t = i18n[currentLang];
+        qiblaText.textContent = 'Запрашиваем GPS...';
+
+        if (!navigator.geolocation) {
+            qiblaText.textContent = 'GPS не поддерживается';
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(pos => {
+            userLocation = { lat: pos.coords.latitude, lon: pos.coords.longitude };
+            var qiblaAngle = calculateQibla(userLocation.lat, userLocation.lon);
+            var distance = calculateDistance(userLocation.lat, userLocation.lon, MAKKAH.lat, MAKKAH.lon);
+            qiblaDistance.textContent = distance + ' км до Мекки';
+
+            qiblaText.textContent = t.qiblaActive;
+            qiblaBtn.style.display = 'none';
+            compassActive = true;
+
+            // ANDROID: пробуем deviceorientationabsolute сначала
+            if ('ondeviceorientationabsolute' in window) {
+                window.addEventListener('deviceorientationabsolute', function(e) {
+                    handleOrientation(e, qiblaAngle);
+                });
+            }
+            // iOS и старый Android
+            else if (window.DeviceOrientationEvent) {
+                if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                    DeviceOrientationEvent.requestPermission().then(perm => {
+                        if (perm === 'granted') {
+                            window.addEventListener('deviceorientation', function(e) {
+                                handleOrientation(e, qiblaAngle);
+                            });
+                        } else {
+                            qiblaText.textContent = t.qiblaError;
+                        }
+                    });
+                } else {
+                    window.addEventListener('deviceorientation', function(e) {
+                        handleOrientation(e, qiblaAngle);
+                    });
+                }
+            } else {
+                qiblaText.textContent = 'Компас не поддерживается. Направление: ' + Math.round(qiblaAngle) + '°';
+            }
+
+        }, err => {
+            qiblaText.textContent = 'GPS отклонен. Включи в настройках браузера';
+        }, {
+            enableHighAccuracy: true,
+            timeout: 10000
+        });
+    };
+
+    function handleOrientation(e, qiblaAngle) {
+        if (!compassActive) return;
+
+        var heading;
+        // iOS
+        if (e.webkitCompassHeading) {
+            heading = e.webkitCompassHeading;
+        }
+        // Android с absolute
+        else if (e.absolute && e.alpha!== null) {
+            heading = 360 - e.alpha;
+        }
+        // Android обычный
+        else if (e.alpha!== null) {
+            heading = 360 - e.alpha;
+        }
+        else {
+            return;
+        }
+
+        var rotation = qiblaAngle - heading;
+        qiblaArrow.style.transform = `translate(-50%, -100%) rotate(${rotation}deg)`;
+    }
 </body>
 </html>
