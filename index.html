@@ -1,475 +1,321 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quran MuratX</title>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;600;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Manrope', sans-serif;
-            min-height: 100vh;
-            color: white;
-            background: linear-gradient(135deg, #0f172a, #1e293b);
-        }
-      .bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #064e3b 100%);
-    z-index: -1;
+<script>
+// ДАННЫЕ НАМАЗА
+const PRAYER_TIMES = {
+    Fajr: '03:45', Sunrise: '05:25', Dhuhr: '13:15',
+    Asr: '17:25', Maghrib: '20:50', Isha: '22:30'
+};
+
+// СПИСОК ВСЕХ 114 СУР
+const SURAHS = [
+    {id:1,name_ar:"الفَاتِحَة",name_ru:"Аль-Фатиха",ayahs:7},
+    {id:2,name_ar:"البَقَرَة",name_ru:"Аль-Бакара",ayahs:286},
+    {id:3,name_ar:"آل عِمرَان",name_ru:"Али Имран",ayahs:200},
+    {id:4,name_ar:"النِّسَاء",name_ru:"Ан-Ниса",ayahs:176},
+    {id:5,name_ar:"المَائدة",name_ru:"Аль-Маида",ayahs:120},
+    {id:6,name_ar:"الأنعَام",name_ru:"Аль-Анам",ayahs:165},
+    {id:7,name_ar:"الأعرَاف",name_ru:"Аль-Араф",ayahs:206},
+    {id:8,name_ar:"الأنفَال",name_ru:"Аль-Анфаль",ayahs:75},
+    {id:9,name_ar:"التوبَة",name_ru:"Ат-Тауба",ayahs:129},
+    {id:10,name_ar:"يُونس",name_ru:"Юнус",ayahs:109},
+    {id:11,name_ar:"هُود",name_ru:"Худ",ayahs:123},
+    {id:12,name_ar:"يُوسُف",name_ru:"Юсуф",ayahs:111},
+    {id:13,name_ar:"الرَّعْد",name_ru:"Ар-Рад",ayahs:43},
+    {id:14,name_ar:"إبراهِيم",name_ru:"Ибрахим",ayahs:52},
+    {id:15,name_ar:"الحِجْر",name_ru:"Аль-Хиджр",ayahs:99},
+    {id:16,name_ar:"النَّحْل",name_ru:"Ан-Нахль",ayahs:128},
+    {id:17,name_ar:"الإسْرَاء",name_ru:"Аль-Исра",ayahs:111},
+    {id:18,name_ar:"الكهْف",name_ru:"Аль-Кахф",ayahs:110},
+    {id:19,name_ar:"مَريَم",name_ru:"Марьям",ayahs:98},
+    {id:20,name_ar:"طه",name_ru:"Та Ха",ayahs:135},
+    {id:21,name_ar:"الأنبيَاء",name_ru:"Аль-Анбия",ayahs:112},
+    {id:22,name_ar:"الحَج",name_ru:"Аль-Хадж",ayahs:78},
+    {id:23,name_ar:"المُؤمنون",name_ru:"Аль-Муминун",ayahs:118},
+    {id:24,name_ar:"النُّور",name_ru:"Ан-Нур",ayahs:64},
+    {id:25,name_ar:"الفُرْقان",name_ru:"Аль-Фуркан",ayahs:77},
+    {id:26,name_ar:"الشُّعَرَاء",name_ru:"Аш-Шуара",ayahs:227},
+    {id:27,name_ar:"النَّمْل",name_ru:"Ан-Намль",ayahs:93},
+    {id:28,name_ar:"القَصَص",name_ru:"Аль-Касас",ayahs:88},
+    {id:29,name_ar:"العَنكبوت",name_ru:"Аль-Анкабут",ayahs:69},
+    {id:30,name_ar:"الرُّوم",name_ru:"Ар-Рум",ayahs:60},
+    {id:31,name_ar:"لقمَان",name_ru:"Лукман",ayahs:34},
+    {id:32,name_ar:"السَّجدَة",name_ru:"Ас-Саджда",ayahs:30},
+    {id:33,name_ar:"الأحزَاب",name_ru:"Аль-Ахзаб",ayahs:73},
+    {id:34,name_ar:"سَبَأ",name_ru:"Саба",ayahs:54},
+    {id:35,name_ar:"فَاطِر",name_ru:"Фатыр",ayahs:45},
+    {id:36,name_ar:"يس",name_ru:"Ясин",ayahs:83},
+    {id:37,name_ar:"الصَّافات",name_ru:"Ас-Саффат",ayahs:182},
+    {id:38,name_ar:"ص",name_ru:"Сад",ayahs:88},
+    {id:39,name_ar:"الزُّمَر",name_ru:"Аз-Зумар",ayahs:75},
+    {id:40,name_ar:"غَافِر",name_ru:"Гафир",ayahs:85},
+    {id:41,name_ar:"فُصِّلَت",name_ru:"Фуссилят",ayahs:54},
+    {id:42,name_ar:"الشُّورى",name_ru:"Аш-Шура",ayahs:53},
+    {id:43,name_ar:"الزُّخْرُف",name_ru:"Аз-Зухруф",ayahs:89},
+    {id:44,name_ar:"الدُّخان",name_ru:"Ад-Духан",ayahs:59},
+    {id:45,name_ar:"الجاثِية",name_ru:"Аль-Джасия",ayahs:37},
+    {id:46,name_ar:"الأحقاف",name_ru:"Аль-Ахкаф",ayahs:35},
+    {id:47,name_ar:"مُحَمّد",name_ru:"Мухаммад",ayahs:38},
+    {id:48,name_ar:"الفَتْح",name_ru:"Аль-Фатх",ayahs:29},
+    {id:49,name_ar:"الحُجُرات",name_ru:"Аль-Худжурат",ayahs:18},
+    {id:50,name_ar:"ق",name_ru:"Каф",ayahs:45},
+    {id:51,name_ar:"الذَّاريَات",name_ru:"Аз-Зарият",ayahs:60},
+    {id:52,name_ar:"الطُّور",name_ru:"Ат-Тур",ayahs:49},
+    {id:53,name_ar:"النَّجْم",name_ru:"Ан-Наджм",ayahs:62},
+    {id:54,name_ar:"القَمَر",name_ru:"Аль-Камар",ayahs:55},
+    {id:55,name_ar:"الرَّحمن",name_ru:"Ар-Рахман",ayahs:78},
+    {id:56,name_ar:"الوَاقِعَة",name_ru:"Аль-Вакиа",ayahs:96},
+    {id:57,name_ar:"الحَديد",name_ru:"Аль-Хадид",ayahs:29},
+    {id:58,name_ar:"المُجَادلة",name_ru:"Аль-Муджадила",ayahs:22},
+    {id:59,name_ar:"الحَشْر",name_ru:"Аль-Хашр",ayahs:24},
+    {id:60,name_ar:"المُمتَحنَة",name_ru:"Аль-Мумтахана",ayahs:13},
+    {id:61,name_ar:"الصَّف",name_ru:"Ас-Сафф",ayahs:14},
+    {id:62,name_ar:"الجُمعَة",name_ru:"Аль-Джумуа",ayahs:11},
+    {id:63,name_ar:"المُنَافِقون",name_ru:"Аль-Мунафикун",ayahs:11},
+    {id:64,name_ar:"التَّغَابُن",name_ru:"Ат-Тагабун",ayahs:18},
+    {id:65,name_ar:"الطَّلَاق",name_ru:"Ат-Талак",ayahs:12},
+    {id:66,name_ar:"التَّحْريم",name_ru:"Ат-Тахрим",ayahs:12},
+    {id:67,name_ar:"المُلْك",name_ru:"Аль-Мульк",ayahs:30},
+    {id:68,name_ar:"القَلَم",name_ru:"Аль-Калам",ayahs:52},
+    {id:69,name_ar:"الحَاقَّة",name_ru:"Аль-Хакка",ayahs:52},
+    {id:70,name_ar:"المَعَارِج",name_ru:"Аль-Мааридж",ayahs:44},
+    {id:71,name_ar:"نُوح",name_ru:"Нух",ayahs:28},
+    {id:72,name_ar:"الجِن",name_ru:"Аль-Джинн",ayahs:28},
+    {id:73,name_ar:"المُزَّمِّل",name_ru:"Аль-Муззаммиль",ayahs:20},
+    {id:74,name_ar:"المُدَّثِّر",name_ru:"Аль-Муддассир",ayahs:56},
+    {id:75,name_ar:"القِيَامَة",name_ru:"Аль-Кыяма",ayahs:40},
+    {id:76,name_ar:"الإنسَان",name_ru:"Аль-Инсан",ayahs:31},
+    {id:77,name_ar:"المُرسَلات",name_ru:"Аль-Мурсалят",ayahs:50},
+    {id:78,name_ar:"النَّبَأ",name_ru:"Ан-Наба",ayahs:40},
+    {id:79,name_ar:"النَّازعَات",name_ru:"Ан-Назиат",ayahs:46},
+    {id:80,name_ar:"عَبَس",name_ru:"Абаса",ayahs:42},
+    {id:81,name_ar:"التَّكوير",name_ru:"Ат-Таквир",ayahs:29},
+    {id:82,name_ar:"الانفِطار",name_ru:"Аль-Инфитар",ayahs:19},
+    {id:83,name_ar:"المُطَفِّفين",name_ru:"Аль-Мутаффифин",ayahs:36},
+    {id:84,name_ar:"الانشقَاق",name_ru:"Аль-Иншикак",ayahs:25},
+    {id:85,name_ar:"البُروج",name_ru:"Аль-Бурудж",ayahs:22},
+    {id:86,name_ar:"الطَّارِق",name_ru:"Ат-Тарик",ayahs:17},
+    {id:87,name_ar:"الأعلَى",name_ru:"Аль-Аля",ayahs:19},
+    {id:88,name_ar:"الغَاشِية",name_ru:"Аль-Гашия",ayahs:26},
+    {id:89,name_ar:"الفَجْر",name_ru:"Аль-Фаджр",ayahs:30},
+    {id:90,name_ar:"البَلَد",name_ru:"Аль-Баляд",ayahs:20},
+    {id:91,name_ar:"الشَّمس",name_ru:"Аш-Шамс",ayahs:15},
+    {id:92,name_ar:"اللَّيْل",name_ru:"Аль-Лейль",ayahs:21},
+    {id:93,name_ar:"الضُّحَى",name_ru:"Ад-Духа",ayahs:11},
+    {id:94,name_ar:"الشَّرْح",name_ru:"Аш-Шарх",ayahs:8},
+    {id:95,name_ar:"التِّين",name_ru:"Ат-Тин",ayahs:8},
+    {id:96,name_ar:"العَلَق",name_ru:"Аль-Аляк",ayahs:19},
+    {id:97,name_ar:"القَدْر",name_ru:"Аль-Кадр",ayahs:5},
+    {id:98,name_ar:"البَيِّنَة",name_ru:"Аль-Баййина",ayahs:8},
+    {id:99,name_ar:"الزَّلزَلة",name_ru:"Аз-Зальзаля",ayahs:8},
+    {id:100,name_ar:"العَادِيات",name_ru:"Аль-Адият",ayahs:11},
+    {id:101,name_ar:"القَارِعة",name_ru:"Аль-Кариа",ayahs:11},
+    {id:102,name_ar:"التَّكَاثر",name_ru:"Ат-Такасур",ayahs:8},
+    {id:103,name_ar:"العَصْر",name_ru:"Аль-Аср",ayahs:3},
+    {id:104,name_ar:"الهُمَزَة",name_ru:"Аль-Хумаза",ayahs:9},
+    {id:105,name_ar:"الفِيل",name_ru:"Аль-Филь",ayahs:5},
+    {id:106,name_ar:"قُرَيْش",name_ru:"Курайш",ayahs:4},
+    {id:107,name_ar:"المَاعُون",name_ru:"Аль-Маун",ayahs:7},
+    {id:108,name_ar:"الكَوْثَر",name_ru:"Аль-Каусар",ayahs:3},
+    {id:109,name_ar:"الكافِرون",name_ru:"Аль-Кафирун",ayahs:6},
+    {id:110,name_ar:"النَّصْر",name_ru:"Ан-Наср",ayahs:3},
+    {id:111,name_ar:"المَسَد",name_ru:"Аль-Масад",ayahs:5},
+    {id:112,name_ar:"الإخْلَاص",name_ru:"Аль-Ихлас",ayahs:4},
+    {id:113,name_ar:"الفَلَق",name_ru:"Аль-Фаляк",ayahs:5},
+    {id:114,name_ar:"النَّاس",name_ru:"Ан-Нас",ayahs:6}
+];
+
+let QURAN_DATA = {};
+let currentView = 'timer';
+let currentSurah = null;
+let currentTab = 'all';
+let currentBg = parseInt(localStorage.getItem('bgIndex')) || 0;
+let currentLang = localStorage.getItem('lang') || 'ru';
+const backgrounds = ['#0f172a','#1e293b','#1e1b4b','#164e63','#4c1d95'];
+
+const i18n = {
+    ru: { timeTo: 'Время до', btn: 'Русский', prayers: { Fajr: 'Фаджр', Sunrise: 'Восход', Dhuhr: 'Зухр', Asr: 'Аср', Maghrib: 'Магриб', Isha: 'Иша' } },
+    kz: { timeTo: 'Уақыт қалды:', btn: 'Қазақша', prayers: { Fajr: 'Таң', Sunrise: 'Күншығыс', Dhuhr: 'Бесін', Asr: 'Екінті', Maghrib: 'Ақшам', Isha: 'Құптан' } },
+    en: { timeTo: 'Time until', btn: 'English', prayers: { Fajr: 'Fajr', Sunrise: 'Sunrise', Dhuhr: 'Dhuhr', Asr: 'Asr', Maghrib: 'Maghrib', Isha: 'Isha' } }
+};
+
+// НАВИГАЦИЯ
+function showView(view) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view' + view.charAt(0).toUpperCase() + view.slice(1)).classList.add('active');
+    document.querySelectorAll('.controls.btn').forEach(b => b.classList.remove('active'));
+    if (view === 'timer') document.getElementById('tabTimer').classList.add('active');
+    if (view === 'surahList' || view === 'surah') document.getElementById('tabSurah').classList.add('active');
+    currentView = view;
+    window.scrollTo(0, 0);
 }
-       .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 40px;
-            background: rgba(0,0,0,0.4);
-            backdrop-filter: blur(15px);
-            border-bottom: 1px solid rgba(255,255,255,0.15);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-       .logo { font-size: 24px; font-weight: 800; cursor: pointer; }
-       .controls { display: flex; gap: 8px; flex-wrap: wrap; }
-       .btn {
-            background: rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.4);
-            color: white;
-            padding: 8px 14px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 600;
-            font-family: inherit;
-            font-size: 14px;
-        }
-       .btn:hover { background: rgba(255,255,255,0.3); }
-       .btn.active { background: #10b981; border-color: #10b981; }
-       .main { padding: 20px; }
-       .container { width: 100%; max-width: 900px; margin: 0 auto; }
-       .glass {
-            background: rgba(0,0,0,0.4);
-            padding: 30px 35px;
-            border-radius: 24px;
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.25);
-            margin-bottom: 20px;
-        }
-       .center { text-align: center; }
-       .city { font-size: 18px; font-weight: 300; opacity: 0.9; margin-bottom: 8px; }
-       .hijri { font-size: 14px; opacity: 0.7; margin-bottom: 16px; }
-       .label { font-size: 16px; font-weight: 300; opacity: 0.8; margin-bottom: 16px; }
-       .time { font-size: 72px; font-weight: 800; letter-spacing: 2px; line-height: 1; margin-bottom: 10px; }
-       .next-prayer { font-size: 14px; opacity: 0.7; margin-bottom: 20px; }
-       .prayer-list {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 8px;
-            margin-bottom: 25px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255,255,255,0.15);
-        }
-       .prayer-item { font-size: 11px; text-align: center; }
-       .prayer-name { opacity: 0.7; margin-bottom: 4px; }
-       .prayer-time { font-weight: 600; }
-       .prayer-item.active { color: #10b981; }
-       .quran-btn {
-            background: linear-gradient(135deg, #10b981, #059669);
-            border: none;
-            color: white;
-            padding: 16px 40px;
-            font-size: 18px;
-            font-weight: 600;
-            border-radius: 14px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            font-family: inherit;
-            margin: 6px;
-        }
-       .quran-btn.blue { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
-       .title { font-size: 28px; font-weight: 800; margin-bottom: 20px; text-align: center; }
-       .surah-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 12px;
-        }
-       .surah-item {
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            padding: 15px;
-            border-radius: 14px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            text-align: left;
-        }
-       .surah-item:hover { background: rgba(16,185,129,0.3); border-color: #10b981; }
-       .surah-num {
-            background: #10b981;
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            flex-shrink: 0;
-        }
-       .surah-name-ar { font-family: 'Amiri', serif; font-size: 20px; margin-bottom: 4px; }
-       .surah-name-ru { font-size: 14px; opacity: 0.8; }
-       .surah-ayahs { font-size: 12px; opacity: 0.6; }
-       .surah-header { text-align: center; margin-bottom: 30px; }
-       .surah-title-ar { font-family: 'Amiri', serif; font-size: 42px; margin-bottom: 8px; }
-       .surah-title-ru { font-size: 20px; opacity: 0.8; margin-bottom: 8px; }
-       .tabs {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-        }
-       .tab-btn {
-            background: rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.4);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 600;
-            font-family: inherit;
-        }
-       .tab-btn.active { background: #10b981; border-color: #10b981; }
-       .ayah {
-            margin-bottom: 25px;
-            padding-bottom: 25px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            text-align: left;
-        }
-       .ayah-num {
-            display: inline-block;
-            background: rgba(16,185,129,0.3);
-            border: 1px solid #10b981;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 12px;
-        }
-       .ayah-ar {
-            font-family: 'Amiri', serif;
-            font-size: 28px;
-            line-height: 2;
-            text-align: right;
-            direction: rtl;
-            margin-bottom: 12px;
-        }
-       .ayah-tr {
-            font-size: 16px;
-            line-height: 1.8;
-            opacity: 0.9;
-            margin-bottom: 12px;
-            font-style: italic;
-        }
-       .ayah-ru {
-            font-size: 16px;
-            line-height: 1.8;
-            opacity: 0.85;
-        }
-       .hidden { display: none!important; }
-       .view { display: none; }
-       .view.active { display: block; }
 
-        @media (max-width: 600px) {
-           .time { font-size: 48px; }
-           .glass { padding: 20px 15px; }
-           .header { padding: 12px 15px; }
-           .prayer-list { grid-template-columns: repeat(3, 1fr); gap: 10px; }
-           .surah-grid { grid-template-columns: 1fr; }
-           .surah-title-ar { font-size: 32px; }
-           .ayah-ar { font-size: 24px; }
-        }
-    </style>
-</head>
-<body>
-    <div class="bg" id="bg"></div>
-    <header class="header">
-        <div class="logo" onclick="showView('timer')">Quran MuratX</div>
-        <div class="controls">
-            <button class="btn active" id="tabTimer">⏰ Таймер</button>
-            <button class="btn" id="tabSurah">📖 Суры</button>
-            <button class="btn" id="bgBtn">🕋 Фон 1/5</button>
-            <button class="btn" id="langBtn">Русский</button>
+document.getElementById('tabTimer').onclick = () => showView('timer');
+document.getElementById('tabSurah').onclick = () => { showView('surahList'); renderSurahList(); };
+
+// ФОН
+function setBackground(index) {
+    document.getElementById('bg').style.background = backgrounds[index];
+}
+setBackground(currentBg);
+document.getElementById('bgBtn').onclick = function() {
+    currentBg = (currentBg + 1) % backgrounds.length;
+    localStorage.setItem('bgIndex', currentBg);
+    setBackground(currentBg);
+    this.textContent = '🕋 ' + (currentBg + 1) + '/5';
+};
+
+// ЯЗЫК
+document.getElementById('langBtn').onclick = function() {
+    const langs = ['ru', 'kz', 'en'];
+    const idx = langs.indexOf(currentLang);
+    currentLang = langs[(idx + 1) % langs.length];
+    localStorage.setItem('lang', currentLang);
+    this.textContent = i18n[currentLang].btn;
+    renderPrayerList();
+    updateCountdown();
+};
+
+// ХИДЖРА
+function updateHijriDate() {
+    try {
+        const date = new Date();
+        const hijri = new Intl.DateTimeFormat('ar-TN-u-ca-islamic', { day: 'numeric', month: 'long', year: 'numeric' }).format(date);
+        document.getElementById('hijriDate').textContent = hijri;
+    } catch(e) {
+        document.getElementById('hijriDate').textContent = '15 Мухаррам 1448';
+    }
+}
+
+// ТАЙМЕР
+function renderPrayerList() {
+    const t = i18n[currentLang];
+    const order = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+    const activePrayer = getNextPrayer().key;
+    document.getElementById('prayerList').innerHTML = order.map(key => `
+        <div class="prayer-item ${key === activePrayer? 'active' : ''}">
+            <div class="prayer-name">${t.prayers[key]}</div>
+            <div class="prayer-time">${PRAYER_TIMES[key]}</div>
         </div>
-    </header>
+    `).join('');
+}
 
-    <main class="main">
-        <div class="container">
-            <!-- ТАЙМЕР -->
-            <div class="view active" id="viewTimer">
-                <div class="glass center">
-                    <div class="city">Алматы, Казахстан</div>
-                    <div class="hijri" id="hijriDate"></div>
-                    <div class="label" id="prayerLabel">Время до намаза</div>
-                    <div class="time" id="timer">00:00:00</div>
-                    <div class="next-prayer" id="nextPrayer"></div>
-                    <div class="prayer-list" id="prayerList"></div>
-                    <a href="https://quran.com" target="_blank" class="quran-btn">📖 Читать Коран</a>
-                    <button class="quran-btn blue" onclick="showView('surahList')">📚 Все суры</button>
-                </div>
-            </div>
+function getNextPrayer() {
+    const now = new Date();
+    const order = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+    for (let key of order) {
+        const [h, m] = PRAYER_TIMES[key].split(':');
+        const prayerDate = new Date();
+        prayerDate.setHours(parseInt(h), parseInt(m), 0, 0);
+        if (prayerDate > now) return { key, date: prayerDate };
+    }
+    const [h, m] = PRAYER_TIMES.Fajr.split(':');
+    const prayerDate = new Date();
+    prayerDate.setDate(prayerDate.getDate() + 1);
+    prayerDate.setHours(parseInt(h), parseInt(m), 0, 0);
+    return { key: 'Fajr', date: prayerDate };
+}
 
-            <!-- СПИСОК СУР -->
-            <div class="view" id="viewSurahList">
-                <div class="glass">
-                    <h1 class="title">📖 Суры Священного Корана</h1>
-                    <div class="surah-grid" id="surahList"></div>
-                </div>
-            </div>
+function updateCountdown() {
+    const t = i18n[currentLang];
+    const next = getNextPrayer();
+    const now = new Date();
+    const diff = next.date - now;
+    const h = Math.floor(Math.abs(diff) / 3600000);
+    const m = Math.floor((Math.abs(diff) % 3600000) / 60000);
+    const s = Math.floor((Math.abs(diff) % 60000) / 1000);
 
-            <!-- СТРАНИЦА СУРЫ -->
-            <div class="view" id="viewSurah">
-                <div class="glass">
-                    <button class="btn" onclick="showView('surahList')" style="margin-bottom: 20px;">← Назад к списку</button>
-                    <div class="surah-header">
-                        <div class="surah-title-ar" id="surahTitleAr"></div>
-                        <div class="surah-title-ru" id="surahTitleRu"></div>
-                    </div>
-                    <div class="tabs">
-                        <button class="tab-btn active" data-tab="all">Все вместе</button>
-                        <button class="tab-btn" data-tab="ar">Арабский</button>
-                        <button class="tab-btn" data-tab="tr">Транскрипция</button>
-                        <button class="tab-btn" data-tab="ru">Русский</button>
-                    </div>
-                    <div id="ayahContainer"></div>
-                </div>
+    document.getElementById('prayerLabel').textContent = t.timeTo + ' ' + t.prayers[next.key];
+    document.getElementById('timer').textContent = `${h < 10? '0' + h : h}:${m < 10? '0' + m : m}:${s < 10? '0' + s : s}`;
+    document.getElementById('nextPrayer').textContent = t.prayers[next.key] + ' ' + PRAYER_TIMES[next.key];
+    renderPrayerList();
+}
+
+// СУРЫ
+async function loadQuranData() {
+    try {
+        const res = await fetch('./quran.json');
+        QURAN_DATA = await res.json();
+        console.log('Коран загружен');
+    } catch(e) {
+        console.error('Ошибка загрузки quran.json');
+    }
+}
+
+function renderSurahList() {
+    document.getElementById('surahList').innerHTML = SURAHS.map(s => `
+        <div class="surah-item" onclick="loadSurah(${s.id})">
+            <div class="surah-num">${s.id}</div>
+            <div class="surah-info">
+                <div class="surah-name-ar">${s.name_ar}</div>
+                <div class="surah-name-ru">${s.name_ru}</div>
+                <div class="surah-ayahs">${s.ayahs} аятов</div>
             </div>
         </div>
-    </main>
+    `).join('');
+}
 
-    <script>
-        // ДАННЫЕ
-        const PRAYER_TIMES = {
-            Fajr: '03:45', Sunrise: '05:25', Dhuhr: '13:15',
-            Asr: '17:25', Maghrib: '20:50', Isha: '22:30'
-        };
+function loadSurah(id) {
+    showView('surah');
+    const surah = SURAHS.find(s => s.id === id);
+    currentSurah = id;
 
-        const SURAHS = [
-            {id:1,name_ar:"الفَاتِحَة",name_ru:"Аль-Фатиха",ayahs:7},
-            {id:2,name_ar:"البَقَرَة",name_ru:"Аль-Бакара",ayahs:286},
-            {id:3,name_ar:"آل عِمرَان",name_ru:"Али Имран",ayahs:200},
-            {id:4,name_ar:"النِّسَاء",name_ru:"Ан-Ниса",ayahs:176},
-            {id:5,name_ar:"المَائدة",name_ru:"Аль-Маида",ayahs:120},
-            {id:36,name_ar:"يس",name_ru:"Ясин",ayahs:83},
-            {id:55,name_ar:"الرَّحمن",name_ru:"Ар-Рахман",ayahs:78},
-            {id:56,name_ar:"الوَاقِعَة",name_ru:"Аль-Вакиа",ayahs:96},
-            {id:67,name_ar:"المُلْك",name_ru:"Аль-Мульк",ayahs:30},
-            {id:112,name_ar:"الإخْلَاص",name_ru:"Аль-Ихлас",ayahs:4},
-            {id:113,name_ar:"الفَلَق",name_ru:"Аль-Фаляк",ayahs:5},
-            {id:114,name_ar:"النَّاس",name_ru:"Ан-Нас",ayahs:6}
-        ];
+    document.getElementById('surahTitleAr').textContent = surah.name_ar;
+    document.getElementById('surahTitleRu').textContent = surah.name_ru;
 
-        const SURAHS_DATA = {
-            1: {
-                ar: ["بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ","الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ","الرَّحْمَٰنِ الرَّحِيمِ","مَالِكِ يَوْمِ الدِّينِ","إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ","اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ","صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ"],
-                tr: ["Bismillāhi r-raḥmāni r-raḥīm","Al-ḥamdu lillāhi rabbi l-'ālamīn","Ar-raḥmāni r-raḥīm","Māliki yawmi d-dīn","Iyyāka na'budu wa iyyāka nasta'īn","Ihdinā ṣ-ṣirāṭa l-mustaqīm","Ṣirāṭa lladhīna an'amta 'alayhim ghayri l-maghḍūbi 'alayhim wa la ḍ-ḍāllīn"],
-                ru: ["Во имя Аллаха, Милостивого, Милосердного!","Хвала Аллаху, Господу миров,","Милостивому, Милосердному,","Властелину Дня воздаяния!","Тебе одному мы поклоняемся и Тебя одного молим о помощи.","Веди нас прямым путем,","путем тех, кого Ты облагодетельствовал, не тех, на кого пал гнев, и не заблудших."]
-            },
-            112: {
-                ar: ["قُلْ هُوَ اللَّهُ أَحَدٌ","اللَّهُ الصَّمَدُ","لَمْ يَلِدْ وَلَمْ يُولَدْ","وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ"],
-                tr: ["Qul huwa llāhu aḥad","Allāhu ṣ-ṣamad","Lam yalid wa lam yūlad","Wa lam yakun lahu kufuwan aḥad"],
-                ru: ["Скажи: «Он — Аллах Единый,","Аллах Самодостаточный.","Он не родил и не был рожден,","и нет никого, равного Ему»."]
-            }
-        };
+    const data = QURAN_DATA[id];
+    if (!data) {
+        document.getElementById('ayahContainer').innerHTML = `
+            <div style="text-align:center; padding:40px; opacity:0.7;">
+                Сура "${surah.name_ru}" пока не загружена в quran.json<br>
+                Доступны: Аль-Фатиха, Аль-Ихлас, Аль-Фаляк, Ан-Нас
+            </div>
+        `;
+        return;
+    }
 
-        // ПЕРЕМЕННЫЕ
-        let currentView = 'timer';
-        let currentSurah = null;
-        let currentTab = 'all';
-        let currentBg = parseInt(localStorage.getItem('bgIndex')) || 0;
-        let currentLang = localStorage.getItem('lang') || 'ru';
-        const backgrounds = ['#0f172a','#1e293b','#1e1b4b','#164e63','#4c1d95'];
+    renderAyahs(data.ar, data.tr, data.ru);
+}
 
-        const i18n = {
-            ru: { timeTo: 'Время до', btn: 'Русский', prayers: { Fajr: 'Фаджр', Sunrise: 'Восход', Dhuhr: 'Зухр', Asr: 'Аср', Maghrib: 'Магриб', Isha: 'Иша' } },
-            kz: { timeTo: 'Уақыт қалды:', btn: 'Қазақша', prayers: { Fajr: 'Таң', Sunrise: 'Күншығыс', Dhuhr: 'Бесін', Asr: 'Екінті', Maghrib: 'Ақшам', Isha: 'Құптан' } },
-            en: { timeTo: 'Time until', btn: 'English', prayers: { Fajr: 'Fajr', Sunrise: 'Sunrise', Dhuhr: 'Dhuhr', Asr: 'Asr', Maghrib: 'Maghrib', Isha: 'Isha' } }
-        };
+function renderAyahs(ar, tr, ru) {
+    document.getElementById('ayahContainer').innerHTML = ar.map((a, i) => `
+        <div class="ayah">
+            <div class="ayah-num">Аят ${i + 1}</div>
+            <div class="ayah-ar ayah-part">${a}</div>
+            <div class="ayah-tr ayah-part">${tr[i]}</div>
+            <div class="ayah-ru ayah-part">${ru[i]}</div>
+        </div>
+    `).join('');
+    switchTab(currentTab);
+}
 
-        // НАВИГАЦИЯ
-        function showView(view) {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.getElementById('view' + view.charAt(0).toUpperCase() + view.slice(1)).classList.add('active');
-            document.querySelectorAll('.controls.btn').forEach(b => b.classList.remove('active'));
-            if (view === 'timer') document.getElementById('tabTimer').classList.add('active');
-            if (view === 'surahList' || view === 'surah') document.getElementById('tabSurah').classList.add('active');
-            currentView = view;
-            window.scrollTo(0, 0);
-        }
+// ВКЛАДКИ СУРЫ
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.onclick = () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentTab = btn.dataset.tab;
+        switchTab(currentTab);
+    };
+});
 
-        document.getElementById('tabTimer').onclick = () => showView('timer');
-        document.getElementById('tabSurah').onclick = () => { showView('surahList'); renderSurahList(); };
+function switchTab(tab) {
+    document.querySelectorAll('.ayah-part').forEach(el => el.classList.add('hidden'));
+    if (tab === 'all') {
+        document.querySelectorAll('.ayah-part').forEach(el => el.classList.remove('hidden'));
+    } else if (tab === 'ar') {
+        document.querySelectorAll('.ayah-ar').forEach(el => el.classList.remove('hidden'));
+    } else if (tab === 'tr') {
+        document.querySelectorAll('.ayah-tr').forEach(el => el.classList.remove('hidden'));
+    } else if (tab === 'ru') {
+        document.querySelectorAll('.ayah-ru').forEach(el => el.classList.remove('hidden'));
+    }
+}
 
-        // ФОН
-        function setBackground(index) {
-            document.getElementById('bg').style.background = `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), ${backgrounds[index]}`;
-        }
-        setBackground(currentBg);
-        document.getElementById('bgBtn').onclick = function() {
-            currentBg = (currentBg + 1) % backgrounds.length;
-            localStorage.setItem('bgIndex', currentBg);
-            setBackground(currentBg);
-            this.textContent = '🕋 ' + (currentBg + 1) + '/5';
-        };
-
-        // ЯЗЫК
-        document.getElementById('langBtn').onclick = function() {
-            const langs = ['ru', 'kz', 'en'];
-            const idx = langs.indexOf(currentLang);
-            currentLang = langs[(idx + 1) % langs.length];
-            localStorage.setItem('lang', currentLang);
-            this.textContent = i18n[currentLang].btn;
-            renderPrayerList();
-            updateCountdown();
-        };
-
-        // ХИДЖРА
-        function updateHijriDate() {
-            try {
-                const date = new Date();
-                const hijri = new Intl.DateTimeFormat('ar-TN-u-ca-islamic', { day: 'numeric', month: 'long', year: 'numeric' }).format(date);
-                document.getElementById('hijriDate').textContent = hijri;
-            } catch(e) {
-                document.getElementById('hijriDate').textContent = '15 Мухаррам 1448';
-            }
-        }
-
-        // ТАЙМЕР
-        function renderPrayerList() {
-            const t = i18n[currentLang];
-            const order = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
-            const activePrayer = getNextPrayer().key;
-            document.getElementById('prayerList').innerHTML = order.map(key => `
-                <div class="prayer-item ${key === activePrayer? 'active' : ''}">
-                    <div class="prayer-name">${t.prayers[key]}</div>
-                    <div class="prayer-time">${PRAYER_TIMES[key]}</div>
-                </div>
-            `).join('');
-        }
-
-        function getNextPrayer() {
-            const now = new Date();
-            const order = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
-            for (let key of order) {
-                const [h, m] = PRAYER_TIMES[key].split(':');
-                const prayerDate = new Date();
-                prayerDate.setHours(parseInt(h), parseInt(m), 0, 0);
-                if (prayerDate > now) return { key, date: prayerDate };
-            }
-            const [h, m] = PRAYER_TIMES.Fajr.split(':');
-            const prayerDate = new Date();
-            prayerDate.setDate(prayerDate.getDate() + 1);
-            prayerDate.setHours(parseInt(h), parseInt(m), 0, 0);
-            return { key: 'Fajr', date: prayerDate };
-        }
-
-        function updateCountdown() {
-            const t = i18n[currentLang];
-            const next = getNextPrayer();
-            const now = new Date();
-            const diff = next.date - now;
-            const h = Math.floor(Math.abs(diff) / 3600000);
-            const m = Math.floor((Math.abs(diff) % 3600000) / 60000);
-            const s = Math.floor((Math.abs(diff) % 60000) / 1000);
-
-            document.getElementById('prayerLabel').textContent = t.timeTo + ' ' + t.prayers[next.key];
-            document.getElementById('timer').textContent = `${h < 10? '0' + h : h}:${m < 10? '0' + m : m}:${s < 10? '0' + s : s}`;
-            document.getElementById('nextPrayer').textContent = t.prayers[next.key] + ' ' + PRAYER_TIMES[next.key];
-            renderPrayerList();
-        }
-
-        // СУРЫ
-        function renderSurahList() {
-            document.getElementById('surahList').innerHTML = SURAHS.map(s => `
-                <div class="surah-item" onclick="loadSurah(${s.id})">
-                    <div class="surah-num">${s.id}</div>
-                    <div class="surah-info">
-                        <div class="surah-name-ar">${s.name_ar}</div>
-                        <div class="surah-name-ru">${s.name_ru}</div>
-                        <div class="surah-ayahs">${s.ayahs} аятов</div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function loadSurah(id) {
-            showView('surah');
-            const surah = SURAHS.find(s => s.id === id);
-            currentSurah = id;
-
-            document.getElementById('surahTitleAr').textContent = surah.name_ar;
-            document.getElementById('surahTitleRu').textContent = surah.name_ru;
-
-            const data = SURAHS_DATA[id];
-            if (!data) {
-                document.getElementById('ayahContainer').innerHTML = `
-                    <div style="text-align:center; padding:40px; opacity:0.7;">
-                        Сура ${surah.name_ru} будет добавлена позже.<br>Пока доступна только Аль-Фатиха и Аль-Ихлас.
-                    </div>
-                `;
-                return;
-            }
-
-            renderAyahs(data.ar, data.tr, data.ru);
-        }
-
-        function renderAyahs(ar, tr, ru) {
-            document.getElementById('ayahContainer').innerHTML = ar.map((a, i) => `
-                <div class="ayah">
-                    <div class="ayah-num">Аят ${i + 1}</div>
-                    <div class="ayah-ar ayah-part">${a}</div>
-                    <div class="ayah-tr ayah-part">${tr[i]}</div>
-                    <div class="ayah-ru ayah-part">${ru[i]}</div>
-                </div>
-            `).join('');
-            switchTab(currentTab);
-        }
-
-        // ВКЛАДКИ СУРЫ
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.onclick = () => {
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentTab = btn.dataset.tab;
-                switchTab(currentTab);
-            };
-        });
-
-        function switchTab(tab) {
-            document.querySelectorAll('.ayah-part').forEach(el => el.classList.add('hidden'));
-            if (tab === 'all') {
-                document.querySelectorAll('.ayah-part').forEach(el => el.classList.remove('hidden'));
-            } else if (tab === 'ar') {
-                document.querySelectorAll('.ayah-ar').forEach(el => el.classList.remove('hidden'));
-            } else if (tab === 'tr') {
-                document.querySelectorAll('.ayah-tr').forEach(el => el.classList.remove('hidden'));
-            } else if (tab === 'ru') {
-                document.querySelectorAll('.ayah-ru').forEach(el => el.classList.remove('hidden'));
-            }
-        }
-
-        // СТАРТ
-        document.getElementById('langBtn').textContent = i18n[currentLang].btn;
-        document.getElementById('bgBtn').textContent = '🕋 ' + (currentBg + 1) + '/5';
-        updateHijriDate();
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
-        renderPrayerList();
-    </script>
-</body>
-</html>
+// СТАРТ
+document.getElementById('langBtn').textContent = i18n[currentLang].btn;
+document.getElementById('bgBtn').textContent = '🕋 ' + (currentBg + 1) + '/5';
+updateHijriDate();
+updateCountdown();
+setInterval(updateCountdown, 1000);
+renderPrayerList();
+loadQuranData();
+</script>
