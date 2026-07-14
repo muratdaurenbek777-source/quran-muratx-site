@@ -108,8 +108,6 @@
         }
       .quran-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(16,185,129,0.7); }
 
-       // Замени весь блок QIBLA COMPASS на этот:
-
         // QIBLA COMPASS
         function calculateQibla(lat, lon) {
             var phi1 = lat * Math.PI / 180;
@@ -426,6 +424,210 @@
         renderPrayerList();
         setInterval(updateCountdown, 1000);
         updateUI();
-    </script>
+   <script>
+    // ВРЕМЯ НАМАЗА ДЛЯ АЛМАТЫ - ИЮЛЬ 2026
+    var PRAYER_TIMES = {
+        Fajr: '03:45', Sunrise: '05:25', Dhuhr: '13:15',
+        Asr: '17:25', Maghrib: '20:50', Isha: '22:30'
+    };
+
+    // Координаты Мекки для Киблы
+    var MAKKAH = { lat: 21.4225, lon: 39.8262 };
+    var userLocation = { lat: 43.2220, lon: 76.8512 }; // Алматы по умолчанию
+    var compassActive = false;
+
+    var backgrounds = ['./bg1.jpg', './bg2.jpg', './bg3.jpg', './bg4.jpg', './bg5.jpg'];
+    var currentBg = parseInt(localStorage.getItem('bgIndex')) || 0;
+    var currentTab = 'timer';
+
+    var bgEl = document.getElementById('bg');
+    var bgBtn = document.getElementById('bgBtn');
+    var langBtn = document.getElementById('langBtn');
+    var timerEl = document.getElementById('timer');
+    var prayerListEl = document.getElementById('prayerList');
+    var hijriEl = document.getElementById('hijriDate');
+    var qiblaArrow = document.getElementById('qiblaArrow');
+    var qiblaBtn = document.getElementById('qiblaBtn');
+    var qiblaText = document.getElementById('qiblaText');
+    var qiblaDistance = document.getElementById('qiblaDistance');
+
+    // TABS
+    document.getElementById('tabTimer').onclick = () => switchTab('timer');
+    document.getElementById('tabQibla').onclick = () => switchTab('qibla');
+
+    function switchTab(tab) {
+        currentTab = tab;
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.controls.btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('content' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+        document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+    }
+
+    function setBackground(index) {
+        bgEl.style.backgroundImage = 'linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url(' + backgrounds[index] + ')';
+    }
+    setBackground(currentBg);
+
+    bgBtn.onclick = function() {
+        currentBg = (currentBg + 1) % backgrounds.length;
+        localStorage.setItem('bgIndex', currentBg);
+        setBackground(currentBg);
+        bgBtn.textContent = '🕋 ' + (currentBg + 1) + '/5';
+    };
+
+    var langs = ['ru', 'kz', 'en'];
+    var currentLang = localStorage.getItem('lang') || 'ru';
+
+    var i18n = {
+        ru: { timeTo: 'Время до', quran: '📖 Читать Коран', btn: 'Русский', prayers: { Fajr: 'Фаджр', Sunrise: 'Восход', Dhuhr: 'Зухр', Asr: 'Аср', Maghrib: 'Магриб', Isha: 'Иша' }, qibla: 'Нажми чтобы включить компас и GPS', qiblaActive: 'Поворачивай телефон. Стрелка указывает на Киблу', qiblaError: 'Разреши доступ к геолокации и компасу в настройках браузера' },
+        kz: { timeTo: 'Уақыт қалды:', quran: '📖 Құран оқу', btn: 'Қазақша', prayers: { Fajr: 'Таң', Sunrise: 'Күншығыс', Dhuhr: 'Бесін', Asr: 'Екінті', Maghrib: 'Ақшам', Isha: 'Құптан' }, qibla: 'Компас пен GPS қосу үшін батырманы бас', qiblaActive: 'Телефонды бұра. Жебе Қыбыланы көрсетеді', qiblaError: 'Браузер баптауларында геолокация мен компасқа рұқсат бер' },
+        en: { timeTo: 'Time until', quran: '📖 Read Quran', btn: 'English', prayers: { Fajr: 'Fajr', Sunrise: 'Sunrise', Dhuhr: 'Dhuhr', Asr: 'Asr', Maghrib: 'Maghrib', Isha: 'Isha' }, qibla: 'Press button to enable compass and GPS', qiblaActive: 'Rotate phone. Arrow points to Qibla', qiblaError: 'Allow location and compass access in browser settings' }
+    };
+
+    function updateUI() {
+        var t = i18n[currentLang];
+        document.getElementById('quranBtn').textContent = t.quran;
+        langBtn.textContent = t.btn;
+        bgBtn.textContent = '🕋 ' + (currentBg + 1) + '/5';
+        qiblaText.textContent = t.qibla;
+        updateHijriDate();
+        updateCountdown();
+    }
+
+    langBtn.onclick = function() {
+        var idx = langs.indexOf(currentLang);
+        currentLang = langs[(idx + 1) % langs.length];
+        localStorage.setItem('lang', currentLang);
+        renderPrayerList();
+        updateUI();
+    };
+
+    function updateHijriDate() {
+        try {
+            var date = new Date();
+            var hijri = new Intl.DateTimeFormat('ar-TN-u-ca-islamic', { day: 'numeric', month: 'long', year: 'numeric' }).format(date);
+            hijriEl.textContent = hijri;
+        } catch(e) {
+            hijriEl.textContent = '15 Мухаррам 1448';
+        }
+    }
+
+    function renderPrayerList() {
+        var t = i18n[currentLang];
+        var html = '';
+        var order = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+        var activePrayer = getNextPrayer().key;
+        for (var i = 0; i < order.length; i++) {
+            var key = order[i];
+            var activeClass = key === activePrayer? 'active' : '';
+            html += '<div class="prayer-item ' + activeClass + '"><div class="prayer-name">' + t.prayers[key] + '</div><div class="prayer-time">' + PRAYER_TIMES[key] + '</div></div>';
+        }
+        prayerListEl.innerHTML = html;
+    }
+
+    function getNextPrayer() {
+        var now = new Date();
+        var order = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+        for (var i = 0; i < order.length; i++) {
+            var key = order[i];
+            var parts = PRAYER_TIMES[key].split(':');
+            var prayerDate = new Date();
+            prayerDate.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
+            if (prayerDate > now) return { key: key, date: prayerDate };
+        }
+        var parts = PRAYER_TIMES.Fajr.split(':');
+        var prayerDate = new Date();
+        prayerDate.setDate(prayerDate.getDate() + 1);
+        prayerDate.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
+        return { key: 'Fajr', date: prayerDate };
+    }
+
+    function updateCountdown() {
+        var t = i18n[currentLang];
+        var next = getNextPrayer();
+        var now = new Date();
+        var diff = next.date - now;
+        var h = Math.floor(Math.abs(diff) / 3600000);
+        var m = Math.floor((Math.abs(diff) % 3600000) / 60000);
+        var s = Math.floor((Math.abs(diff) % 60000) / 1000);
+
+        document.getElementById('prayerLabel').textContent = t.timeTo + ' ' + t.prayers[next.key];
+        timerEl.textContent = (h < 10? '0' + h : h) + ':' + (m < 10? '0' + m : m) + ':' + (s < 10? '0' + s : s);
+        document.getElementById('nextPrayer').textContent = t.prayers[next.key] + ' ' + PRAYER_TIMES[next.key];
+        renderPrayerList();
+    }
+
+    // QIBLA COMPASS
+    function calculateQibla(lat, lon) {
+        var phi1 = lat * Math.PI / 180;
+        var phi2 = MAKKAH.lat * Math.PI / 180;
+        var delta = (MAKKAH.lon - lon) * Math.PI / 180;
+        var y = Math.sin(delta);
+        var x = Math.cos(phi1) * Math.tan(phi2) - Math.sin(phi1) * Math.cos(delta);
+        var qibla = Math.atan2(y, x) * 180 / Math.PI;
+        return (qibla + 360) % 360;
+    }
+
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+        var R = 6371;
+        var dLat = (lat2 - lat1) * Math.PI / 180;
+        var dLon = (lon2 - lon1) * Math.PI / 180;
+        var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return Math.round(R * c);
+    }
+
+    qiblaBtn.onclick = function() {
+        var t = i18n[currentLang];
+
+        // 1. Сначала запрашиваем геолокацию
+        qiblaText.textContent = 'Запрашиваем GPS...';
+        navigator.geolocation.getCurrentPosition(pos => {
+            userLocation = { lat: pos.coords.latitude, lon: pos.coords.longitude };
+            var qiblaAngle = calculateQibla(userLocation.lat, userLocation.lon);
+            var distance = calculateDistance(userLocation.lat, userLocation.lon, MAKKAH.lat, MAKKAH.lon);
+            qiblaDistance.textContent = distance + ' км до Мекки';
+
+            // 2. Потом запрашиваем компас для iOS
+            if (window.DeviceOrientationEvent) {
+                if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                    DeviceOrientationEvent.requestPermission().then(perm => {
+                        if (perm === 'granted') {
+                            startCompass(qiblaAngle);
+                        } else {
+                            qiblaText.textContent = t.qiblaError;
+                        }
+                    }).catch(() => {
+                        qiblaText.textContent = t.qiblaError;
+                    });
+                } else {
+                    startCompass(qiblaAngle);
+                }
+            } else {
+                qiblaText.textContent = 'Компас не поддерживается на этом устройстве';
+            }
+        }, () => {
+            qiblaText.textContent = t.qiblaError;
+        });
+    };
+
+    function startCompass(qiblaAngle) {
+        var t = i18n[currentLang];
+        qiblaText.textContent = t.qiblaActive;
+        qiblaBtn.style.display = 'none';
+        compassActive = true;
+
+        window.addEventListener('deviceorientation', function(e) {
+            if (!compassActive) return;
+            var heading = e.webkitCompassHeading || Math.abs(e.alpha - 360);
+            var rotation = qiblaAngle - heading;
+            qiblaArrow.style.transform = `translate(-50%, -100%) rotate(${rotation}deg)`;
+        });
+    }
+
+    renderPrayerList();
+    setInterval(updateCountdown, 1000);
+    updateUI();
+</script>
 </body>
 </html>
