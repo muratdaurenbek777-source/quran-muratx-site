@@ -236,15 +236,15 @@ function getNextPrayer(){const now=new Date();const order=['Fajr','Sunrise','Dhu
 function renderPrayerList(){const t=prayers_i18n[currentLang];const order=['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'];const active=getNextPrayer().key;document.getElementById('prayerList').innerHTML=order.map(k=>`<div class="prayer-item ${k===active?'active':''}"><div class="prayer-name">${t[k]}</div><div class="prayer-time">${PRAYER_TIMES[k]}</div></div>`).join('');}
 function updateCountdown(){const t=prayers_i18n[currentLang];const t2=i18n[currentLang];const next=getNextPrayer();const diff=next.date-new Date();const h=Math.floor(Math.abs(diff)/3600000);const m=Math.floor((Math.abs(diff)%3600000)/60000);const s=Math.floor((Math.abs(diff)%60000)/1000);document.getElementById('prayerLabel').textContent=t2.timeTo+' '+t[next.key];document.getElementById('timer').textContent=`${h<10?'0'+h:h}:${m<10?'0'+m:m}:${s<10?'0'+s:s}`;document.getElementById('nextPrayer').textContent=t[next.key]+' '+PRAYER_TIMES[next.key];}
 function renderSurahList(){const lang=currentLang;document.getElementById('surahList').innerHTML=SURAHS.map(s=>{const name=lang==='kz'?s.name_kz:s.name_ru;return `<div class="surah-item" onclick="loadSurah(${s.id})"><div class="surah-num">${s.id}</div><div><div class="surah-name-ar">${s.name_ar}</div><div class="surah-name-ru">${name}</div><div class="surah-ayahs">${s.ayahs} аят</div></div></div>`;}).join('');}
-async function loadQuranData(){try{const r=await fetch('./quran_full.json');QURAN_DATA=await r.json();}catch(e){console.log('full json not found, using embedded');QURAN_DATA=window.EMBEDDED_DATA;}}
+async function loadQuranData(){try{let r=await fetch('./quran_full_kz.json');if(!r.ok) r=await fetch('./quran_full_kz.json');QURAN_DATA=await r.json();QURAN_DATA={...window.EMBEDDED_DATA,...QURAN_DATA};}catch(e){console.log('full json not found, using embedded');QURAN_DATA=window.EMBEDDED_DATA;}}
 function loadSurah(id){
 showView('surah');
 const s=SURAHS.find(x=>x.id===id);
 document.getElementById('surahTitleAr').textContent=s.name_ar;
 document.getElementById('surahTitleRu').textContent=currentLang==='kz'?s.name_kz:s.name_ru;
 const data=QURAN_DATA&&QURAN_DATA[id];
-if(!data){
-document.getElementById('ayahContainer').innerHTML=`<div style="text-align:center;padding:30px;opacity:0.8">Сүре "${s.name_kz}" үшін толық аударма дайындалуда.<br>Бұл сүре 30-шы парада емес, сондықтан файл үлкен болады.<br><br>Уақытша <a href="https://quran.com/${id}/translations/103" target="_blank" style="color:#10b981">quran.com - Халифа Алтай аудармасы</a> арқылы оқыңыз.<br><br><span style="opacity:0.6">ID: ${id}, ${s.ayahs} аят</span></div>`;
+if(!data || !data.kz){
+document.getElementById('ayahContainer').innerHTML=`<div style="text-align:center;padding:30px;opacity:0.8"><div class="ayah-ar">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div><br>Сүре "${s.name_kz}" жүктелуде...<br><br>Қазақша аударма Халифа Алтай бойынша дайындалуда, бірақ <a href="https://quran.com/${id}/translations/103" target="_blank" style="color:#10b981">quran.com</a> арқылы толық оқи аласыз.<br><br>ID: ${id}, ${s.ayahs} аят</div>`;
 return;
 }
 renderAyahs(data.ar||[],data.tr||[],data.ru||[],data.kz||[]);
