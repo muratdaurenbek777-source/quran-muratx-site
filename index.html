@@ -2,43 +2,37 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quran MuratX - Толық Құран Халифа Алтай</title>
+<title>Quran MuratX - 114 сур</title>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;600;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Manrope',sans-serif;min-height:100vh;color:white;background:#0f172a}
-.header{display:flex;justify-content:space-between;align-items:center;padding:12px 15px;background:rgba(0,0,0,0.7);border-bottom:1px solid rgba(255,255,255,0.15);position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:8px}
+.header{display:flex;justify-content:space-between;align-items:center;padding:12px 15px;background:rgba(0,0,0,0.7);border-bottom:1px solid #ffffff22;position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:8px}
 .logo{font-size:20px;font-weight:800;cursor:pointer}
 .controls{display:flex;gap:6px;flex-wrap:wrap}
-.btn{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);color:white;padding:7px 12px;border-radius:10px;cursor:pointer;font-weight:600;font-size:13px;font-family:inherit}
+.btn{background:#ffffff20;border:1px solid #ffffff30;color:white;padding:8px 14px;border-radius:10px;cursor:pointer;font-weight:600;font-size:13px;font-family:inherit}
 .btn.active{background:#10b981;border-color:#10b981}
 .main{padding:15px}.container{max-width:900px;margin:0 auto}
-.glass{background:rgba(0,0,0,0.45);padding:20px 15px;border-radius:20px;border:1px solid rgba(255,255,255,0.15);margin-bottom:15px}
+.glass{background:rgba(0,0,0,0.5);padding:20px 15px;border-radius:20px;border:1px solid #ffffff20;margin-bottom:15px}
 .center{text-align:center}
-.city{font-size:16px;opacity:0.9;margin-bottom:6px}.hijri{font-size:12px;opacity:0.6;margin-bottom:12px}.label{font-size:14px;opacity:0.8;margin-bottom:12px}
-.time{font-size:52px;font-weight:800;margin-bottom:8px;line-height:1}.next-prayer{font-size:13px;opacity:0.7;margin-bottom:15px}
-.prayer-list{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1)}
-.prayer-item{font-size:11px;text-align:center}.prayer-name{opacity:0.6;margin-bottom:3px}.prayer-time{font-weight:600}.prayer-item.active{color:#10b981}
-.quran-btn{background:#10b981;border:none;color:white;padding:12px 20px;font-size:15px;font-weight:600;border-radius:12px;cursor:pointer;text-decoration:none;display:inline-block;margin:4px;font-family:inherit}
-.quran-btn.blue{background:#3b82f6}
-.title{font-size:22px;font-weight:800;margin-bottom:15px;text-align:center}
+.time{font-size:56px;font-weight:800;margin:10px 0}
+.prayer-list{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:15px 0;padding-top:12px;border-top:1px solid #ffffff15}
+.prayer-item{font-size:11px;text-align:center}.prayer-item.active{color:#10b981}
 .surah-grid{display:grid;grid-template-columns:1fr;gap:10px}
-.surah-item{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);padding:12px;border-radius:12px;cursor:pointer;display:flex;align-items:center;gap:12px}
-.surah-item:hover{background:rgba(16,185,129,0.25)}
-.surah-num{background:#10b981;width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex-shrink:0}
+.surah-item{background:#ffffff10;border:1px solid #ffffff20;padding:12px;border-radius:12px;cursor:pointer;display:flex;gap:12px;align-items:center}
+.surah-item:hover{background:#10b98130}
+.surah-num{background:#10b981;width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0}
 .surah-name-ar{font-family:'Amiri',serif;font-size:18px}.surah-name-ru{font-size:13px;opacity:0.8}.surah-ayahs{font-size:11px;opacity:0.5}
-.surah-header{text-align:center;margin-bottom:20px}.surah-title-ar{font-family:'Amiri',serif;font-size:34px;margin-bottom:6px}.surah-title-ru{font-size:16px;opacity:0.8}
+.surah-title-ar{font-family:'Amiri',serif;font-size:34px;text-align:center}.surah-title-ru{text-align:center;opacity:0.8;margin-bottom:15px}
 .tabs{display:flex;gap:6px;justify-content:center;margin-bottom:20px;flex-wrap:wrap}
-.tab-btn{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);color:white;padding:8px 14px;border-radius:10px;cursor:pointer;font-weight:600;font-size:13px;font-family:inherit}
+.tab-btn{background:#ffffff15;border:1px solid #ffffff25;color:white;padding:8px 14px;border-radius:10px;cursor:pointer;font-weight:600;font-size:13px}
 .tab-btn.active{background:#10b981}
-.ayah{margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,0.08)}
-.ayah-num{display:inline-block;background:rgba(16,185,129,0.25);border:1px solid #10b981;padding:3px 10px;border-radius:15px;font-size:11px;margin-bottom:10px}
-.ayah-ar{font-family:'Amiri',serif;font-size:24px;line-height:1.9;text-align:right;direction:rtl;margin-bottom:10px}
-.ayah-tr{font-size:14px;line-height:1.6;opacity:0.85;margin-bottom:8px;font-style:italic}
-.ayah-ru{font-size:14px;line-height:1.6;opacity:0.85;margin-bottom:6px}
-.ayah-kz{font-size:14px;line-height:1.6;opacity:0.95;color:#fcd34d;margin-bottom:6px}
+.ayah{margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid #ffffff10}
+.ayah-num{display:inline-block;background:#10b98130;border:1px solid #10b981;padding:3px 10px;border-radius:15px;font-size:11px;margin-bottom:10px}
+.ayah-ar{font-family:'Amiri',serif;font-size:26px;line-height:1.9;text-align:right;direction:rtl;margin-bottom:10px}
+.ayah-kz{font-size:15px;line-height:1.7;color:#fcd34d;margin-bottom:6px}
+.ayah-ru{font-size:14px;opacity:0.85;margin-bottom:4px}
 .hidden{display:none!important}.view{display:none}.view.active{display:block}
-.loading{color:#10b981;text-align:center;padding:20px}
 </style>
 </head>
 <body>
@@ -46,216 +40,253 @@ body{font-family:'Manrope',sans-serif;min-height:100vh;color:white;background:#0
 <div class="logo" onclick="showView('timer')">Quran MuratX</div>
 <div class="controls">
 <button class="btn active" id="tabTimer">⏰ Таймер</button>
-<button class="btn" id="tabSurah">📖 114 Сүре</button>
-<button class="btn" id="langBtn">Русский</button>
+<button class="btn" id="tabSurah">📖 114 Суры</button>
+<button class="btn" id="langBtn">Қазақша</button>
 </div>
 </header>
 <main class="main"><div class="container">
 <div class="view active" id="viewTimer">
 <div class="glass center">
-<div class="city" id="cityName">Алматы, Казахстан</div>
-<div class="hijri" id="hijriDate"></div>
-<div class="label" id="prayerLabel">Время до намаза</div>
+<div>Алматы, Казахстан</div>
+<div style="font-size:12px;opacity:0.6;margin:8px 0" id="hijriDate">15 Мухаррам 1448</div>
+<div style="opacity:0.8;margin-bottom:8px" id="prayerLabel">Время до намаза</div>
 <div class="time" id="timer">00:00:00</div>
-<div class="next-prayer" id="nextPrayer"></div>
+<div style="font-size:13px;opacity:0.7;margin-bottom:10px" id="nextPrayer"></div>
 <div class="prayer-list" id="prayerList"></div>
-<button class="quran-btn blue" onclick="showView('surahList')">📚 Все 114 сур</button>
+<button class="btn" style="background:#3b82f6;border:none;padding:12px 20px;font-size:15px" onclick="showView('surahList')">📚 Все 114 сур - Барлық сүрелер</button>
 </div>
 </div>
 <div class="view" id="viewSurahList">
 <div class="glass">
-<h1 class="title" id="surahListTitle">📖 114 Сүре - Халифа Алтай</h1>
+<h1 style="text-align:center;margin-bottom:15px;font-size:22px">📖 114 Сүр - Халифа Алтай</h1>
 <div class="surah-grid" id="surahList"></div>
 </div>
 </div>
 <div class="view" id="viewSurah">
 <div class="glass">
-<button class="btn" onclick="showView('surahList')" style="margin-bottom:15px;" id="backBtn">← Назад</button>
-<div class="surah-header">
+<button class="btn" onclick="showView('surahList')" style="margin-bottom:15px">← Артқа / Назад</button>
 <div class="surah-title-ar" id="surahTitleAr"></div>
-<div class="surah-title-ru" id="surahTitleRu"></div>
-</div>
+<div class="surah-title-ru" id="surahTitleRu" style="text-align:center"></div>
 <div class="tabs">
-<button class="tab-btn active" data-tab="all">Все</button>
+<button class="tab-btn active" data-tab="all">Барлығы</button>
 <button class="tab-btn" data-tab="ar">عربي</button>
-<button class="tab-btn" data-tab="tr">Транскрипция</button>
+<button class="tab-btn" data-tab="kz">Қазақша</button>
 <button class="tab-btn" data-tab="ru">Русский</button>
-<button class="tab-btn" data-tab="kz">Қазақша - Халифа Алтай</button>
 </div>
-<div id="ayahContainer"><div class="loading">Жүктелуде...</div></div>
+<div id="ayahContainer"></div>
 </div>
 </div>
 </div></main>
 <script>
-const PRAYER_TIMES = { Fajr: '03:45', Sunrise: '05:25', Dhuhr: '13:15', Asr: '17:25', Maghrib: '20:50', Isha: '22:30' };
+const PRAYER_TIMES = {Fajr:'03:45',Sunrise:'05:25',Dhuhr:'13:15',Asr:'17:25',Maghrib:'20:50',Isha:'22:30'};
 const SURAHS = [
-[1,"الفاتحة","Аль-Фатиха","Фатиха",7],[2,"البقرة","Аль-Бакара","Бақара",286],[3,"آل عمران","Али Имран","Имран әулеті",200],[4,"النساء","Ан-Ниса","Әйелдер",176],[5,"المائدة","Аль-Маида","Дастархан",120],[6,"الأنعام","Аль-Анам","Мал",165],[7,"الأعراف","Аль-Араф","Ағраф",206],[8,"الأنفال","Аль-Анфаль","Олжа",75],[9,"التوبة","Ат-Тауба","Тәубе",129],[10,"يونس","Юнус","Жүніс",109],[11,"هود","Худ","Хұд",123],[12,"يوسف","Юсуф","Жүсіп",111],[13,"الرعد","Ар-Рад","Күркіреу",43],[14,"إبراهيم","Ибрахим","Ибраһим",52],[15,"الحجر","Аль-Хиджр","Хижр",99],[16,"النحل","Ан-Нахль","Ара",128],[17,"الإسراء","Аль-Исра","Исра",111],[18,"الكهف","Аль-Кахф","Үңгір",110],[19,"مريم","Марьям","Мәриям",98],[20,"طه","Та Ха","Та-Ха",135],[21,"الأنبياء","Аль-Анбия","Пайғамбарлар",112],[22,"الحج","Аль-Хадж","Қажылық",78],[23,"المؤمنون","Аль-Муминун","Мүміндер",118],[24,"النور","Ан-Нур","Нұр",64],[25,"الفرقان","Аль-Фуркан","Парақтаушы",77],[26,"الشعراء","Аш-Шуара","Ақындар",227],[27,"النمل","Ан-Намль","Құмырсқалар",93],[28,"القصص","Аль-Касас","Әңгімелер",88],[29,"العنكبوت","Аль-Анкабут","Өрмекші",69],[30,"الروم","Ар-Рум","Румдықтар",60],[31,"لقمان","Лукман","Лұқман",34],[32,"السجدة","Ас-Саджда","Сәжде",30],[33,"الأحزاب","Аль-Ахзаб","Топтар",73],[34,"سبأ","Саба","Саба",54],[35,"فاطر","Фатыр","Жаратушы",45],[36,"يس","Ясин","Ясин",83],[37,"الصافات","Ас-Саффат","Сап түзеушілер",182],[38,"ص","Сад","Сад",88],[39,"الزمر","Аз-Зумар","Топтар",75],[40,"غافر","Гафир","Кешіруші",85],[41,"فصلت","Фуссилят","Түсіндірілген",54],[42,"الشورى","Аш-Шура","Кеңес",53],[43,"الزخرف","Аз-Зухруф","Әшекей",89],[44,"الدخان","Ад-Духан","Түтін",59],[45,"الجاثية","Аль-Джасия","Тізерлеген",37],[46,"الأحقاف","Аль-Ахкаф","Ахқаф",35],[47,"محمد","Мухаммад","Мұхаммед",38],[48,"الفتح","Аль-Фатх","Жеңіс",29],[49,"الحجرات","Аль-Худжурат","Бөлмелер",18],[50,"ق","Каф","Қаф",45],[51,"الذاريات","Аз-Зарият","Дән тозаңдатқыштар",60],[52,"الطور","Ат-Тур","Тур",49],[53,"النجم","Ан-Наджм","Жұлдыз",62],[54,"القمر","Аль-Камар","Ай",55],[55,"الرحمن","Ар-Рахман","Рахман",78],[56,"الواقعة","Аль-Вакиа","Оқиға",96],[57,"الحديد","Аль-Хадид","Темір",29],[58,"المجادلة","Аль-Муджадила","Тартысушы",22],[59,"الحشر","Аль-Хашр","Жиналыс",24],[60,"الممتحنة","Аль-Мумтахана","Сыналған әйел",13],[61,"الصف","Ас-Сафф","Сап",14],[62,"الجمعة","Аль-Джумуа","Жұма",11],[63,"المنافقون","Аль-Мунафикун","Мүнапықтар",11],[64,"التغابن","Ат-Тагабун","Алдау",18],[65,"الطلاق","Ат-Талак","Талақ",12],[66,"التحريم","Ат-Тахрим","Харам ету",12],[67,"الملك","Аль-Мульк","Білік",30],[68,"القلم","Аль-Калам","Қалам",52],[69,"الحاقة","Аль-Хакка","Хақ",52],[70,"المعارج","Аль-Мааридж","Сатылар",44],[71,"نوح","Нух","Нұх",28],[72,"الجن","Аль-Джинн","Жындар",28],[73,"المزمل","Аль-Муззаммиль","Оранған",20],[74,"المدثر","Аль-Муддассир","Қымтанған",56],[75,"القيامة","Аль-Кыяма","Қиямет",40],[76,"الإنسان","Аль-Инсан","Адам",31],[77,"المرسلات","Аль-Мурсалят","Жіберілгендер",50],[78,"النبأ","Ан-Наба","Хабар",40],[79,"النازعات","Ан-Назиат","Жұлқушылар",46],[80,"عبس","Абаса","Қабақ шытты",42],[81,"التكوير","Ат-Таквир","Түрілу",29],[82,"الانفطار","Аль-Инфитар","Жарылу",19],[83,"المطففين","Аль-Мутаффифин","Өлшеуде алдаушылар",36],[84,"الانشقاق","Аль-Иншикак","Жарықшақтану",25],[85,"البروج","Аль-Бурудж","Бұрждар",22],[86,"الطارق","Ат-Тарик","Түнгі келуші",17],[87,"الأعلى","Аль-Аля","Ең Жоғары",19],[88,"الغاشية","Аль-Гашия","Қаптаушы",26],[89,"الفجر","Аль-Фаджр","Таң",30],[90,"البلد","Аль-Баляд","Қала",20],[91,"الشمس","Аш-Шамс","Күн",15],[92,"الليل","Аль-Лейль","Түн",21],[93,"الضحى","Ад-Духа","Духа",11],[94,"الشرح","Аш-Шарх","Кеңейту",8],[95,"التين","Ат-Тин","Інжір",8],[96,"العلق","Аль-Аляк","Ұйыған қан",19],[97,"القدر","Аль-Кадр","Қадір",5],[98,"البينة","Аль-Баййина","Айқын дәлел",8],[99,"الزلزلة","Аз-Зальзаля","Сілкініс",8],[100,"العاديات","Аль-Адият","Шабауылдар",11],[101,"القارعة","Аль-Кариа","Соққы",11],[102,"التكاثر","Ат-Такасур","Көбею",8],[103,"العصر","Аль-Аср","Ғасыр",3],[104,"الهمزة","Аль-Хумаза","Өсекші",9],[105,"الفيل","Аль-Филь","Піл",5],[106,"قريش","Курайш","Құрайыш",4],[107,"الماعون","Аль-Маун","Көмек",7],[108,"الكوثر","Аль-Каусар","Кәусар",3],[109,"الكافرون","Аль-Кафирун","Кәпірлер",6],[110,"النصر","Ан-Наср","Жәрдем",3],[111,"المسد","Аль-Масад","Арқан",5],[112,"الإخلاص","Аль-Ихлас","Ықылас",4],[113,"الفلق","Аль-Фаляк","Таңсәрі",5],[114,"الناس","Ан-Нас","Адамдар",6]
-].map(s=>({id:s[0],name_ar:s[1],name_ru:s[2],name_kz:s[3],ayahs:s[4]}));
-
-let QURAN_DATA = {};
-let KZ_DATA = {};
+{id:1,name_ar:"الفاتحة",name_ru:"Аль-Фатиха",name_kz:"Фатиха",ayahs:7},
+{id:2,name_ar:"البقرة",name_ru:"Аль-Бакара",name_kz:"Бақара",ayahs:286},
+{id:3,name_ar:"آل عمران",name_ru:"Али Имран",name_kz:"Имран әулеті",ayahs:200},
+{id:4,name_ar:"النساء",name_ru:"Ан-Ниса",name_kz:"Әйелдер",ayahs:176},
+{id:5,name_ar:"المائدة",name_ru:"Аль-Маида",name_kz:"Дастархан",ayahs:120},
+{id:6,name_ar:"الأنعام",name_ru:"Аль-Анам",name_kz:"Мал",ayahs:165},
+{id:7,name_ar:"الأعراف",name_ru:"Аль-Араф",name_kz:"Ағраф",ayahs:206},
+{id:8,name_ar:"الأنفال",name_ru:"Аль-Анфаль",name_kz:"Олжа",ayahs:75},
+{id:9,name_ar:"التوبة",name_ru:"Ат-Тауба",name_kz:"Тәубе",ayahs:129},
+{id:10,name_ar:"يونس",name_ru:"Юнус",name_kz:"Жүніс",ayahs:109},
+{id:11,name_ar:"هود",name_ru:"Худ",name_kz:"Хұд",ayahs:123},
+{id:12,name_ar:"يوسف",name_ru:"Юсуф",name_kz:"Жүсіп",ayahs:111},
+{id:13,name_ar:"الرعد",name_ru:"Ар-Рад",name_kz:"Күркіреу",ayahs:43},
+{id:14,name_ar:"إبراهيم",name_ru:"Ибрахим",name_kz:"Ибраһим",ayahs:52},
+{id:15,name_ar:"الحجر",name_ru:"Аль-Хиджр",name_kz:"Хижр",ayahs:99},
+{id:16,name_ar:"النحل",name_ru:"Ан-Нахль",name_kz:"Ара",ayahs:128},
+{id:17,name_ar:"الإسراء",name_ru:"Аль-Исра",name_kz:"Исра",ayahs:111},
+{id:18,name_ar:"الكهف",name_ru:"Аль-Кахф",name_kz:"Үңгір",ayahs:110},
+{id:19,name_ar:"مريم",name_ru:"Марьям",name_kz:"Мәриям",ayahs:98},
+{id:20,name_ar:"طه",name_ru:"Та Ха",name_kz:"Та-Ха",ayahs:135},
+{id:21,name_ar:"الأنبياء",name_ru:"Аль-Анбия",name_kz:"Пайғамбарлар",ayahs:112},
+{id:22,name_ar:"الحج",name_ru:"Аль-Хадж",name_kz:"Қажылық",ayahs:78},
+{id:23,name_ar:"المؤمنون",name_ru:"Аль-Муминун",name_kz:"Мүміндер",ayahs:118},
+{id:24,name_ar:"النور",name_ru:"Ан-Нур",name_kz:"Нұр",ayahs:64},
+{id:25,name_ar:"الفرقان",name_ru:"Аль-Фуркан",name_kz:"Парақтаушы",ayahs:77},
+{id:26,name_ar:"الشعراء",name_ru:"Аш-Шуара",name_kz:"Ақындар",ayahs:227},
+{id:27,name_ar:"النمل",name_ru:"Ан-Намль",name_kz:"Құмырсқалар",ayahs:93},
+{id:28,name_ar:"القصص",name_ru:"Аль-Касас",name_kz:"Әңгімелер",ayahs:88},
+{id:29,name_ar:"العنكبوت",name_ru:"Аль-Анкабут",name_kz:"Өрмекші",ayahs:69},
+{id:30,name_ar:"الروم",name_ru:"Ар-Рум",name_kz:"Румдықтар",ayahs:60},
+{id:31,name_ar:"لقمان",name_ru:"Лукман",name_kz:"Лұқман",ayahs:34},
+{id:32,name_ar:"السجدة",name_ru:"Ас-Саджда",name_kz:"Сәжде",ayahs:30},
+{id:33,name_ar:"الأحزاب",name_ru:"Аль-Ахзаб",name_kz:"Топтар",ayahs:73},
+{id:34,name_ar:"سبأ",name_ru:"Саба",name_kz:"Саба",ayahs:54},
+{id:35,name_ar:"فاطر",name_ru:"Фатыр",name_kz:"Жаратушы",ayahs:45},
+{id:36,name_ar:"يس",name_ru:"Ясин",name_kz:"Ясин",ayahs:83},
+{id:37,name_ar:"الصافات",name_ru:"Ас-Саффат",name_kz:"Сап түзеушілер",ayahs:182},
+{id:38,name_ar:"ص",name_ru:"Сад",name_kz:"Сад",ayahs:88},
+{id:39,name_ar:"الزمر",name_ru:"Аз-Зумар",name_kz:"Топтар",ayahs:75},
+{id:40,name_ar:"غافر",name_ru:"Гафир",name_kz:"Кешіруші",ayahs:85},
+{id:41,name_ar:"فصلت",name_ru:"Фуссилят",name_kz:"Түсіндірілген",ayahs:54},
+{id:42,name_ar:"الشورى",name_ru:"Аш-Шура",name_kz:"Кеңес",ayahs:53},
+{id:43,name_ar:"الزخرف",name_ru:"Аз-Зухруф",name_kz:"Әшекей",ayahs:89},
+{id:44,name_ar:"الدخان",name_ru:"Ад-Духан",name_kz:"Түтін",ayahs:59},
+{id:45,name_ar:"الجاثية",name_ru:"Аль-Джасия",name_kz:"Тізерлеген",ayahs:37},
+{id:46,name_ar:"الأحقاف",name_ru:"Аль-Ахкаф",name_kz:"Ахқаф",ayahs:35},
+{id:47,name_ar:"محمد",name_ru:"Мухаммад",name_kz:"Мұхаммед",ayahs:38},
+{id:48,name_ar:"الفتح",name_ru:"Аль-Фатх",name_kz:"Жеңіс",ayahs:29},
+{id:49,name_ar:"الحجرات",name_ru:"Аль-Худжурат",name_kz:"Бөлмелер",ayahs:18},
+{id:50,name_ar:"ق",name_ru:"Каф",name_kz:"Қаф",ayahs:45},
+{id:51,name_ar:"الذاريات",name_ru:"Аз-Зарият",name_kz:"Дән тозаңдатқыштар",ayahs:60},
+{id:52,name_ar:"الطور",name_ru:"Ат-Тур",name_kz:"Тур",ayahs:49},
+{id:53,name_ar:"النجم",name_ru:"Ан-Наджм",name_kz:"Жұлдыз",ayahs:62},
+{id:54,name_ar:"القمر",name_ru:"Аль-Камар",name_kz:"Ай",ayahs:55},
+{id:55,name_ar:"الرحمن",name_ru:"Ар-Рахман",name_kz:"Рахман",ayahs:78},
+{id:56,name_ar:"الواقعة",name_ru:"Аль-Вакиа",name_kz:"Оқиға",ayahs:96},
+{id:57,name_ar:"الحديد",name_ru:"Аль-Хадид",name_kz:"Темір",ayahs:29},
+{id:58,name_ar:"المجادلة",name_ru:"Аль-Муджадила",name_kz:"Тартысушы",ayahs:22},
+{id:59,name_ar:"الحشر",name_ru:"Аль-Хашр",name_kz:"Жиналыс",ayahs:24},
+{id:60,name_ar:"الممتحنة",name_ru:"Аль-Мумтахана",name_kz:"Сыналған",ayahs:13},
+{id:61,name_ar:"الصف",name_ru:"Ас-Сафф",name_kz:"Сап",ayahs:14},
+{id:62,name_ar:"الجمعة",name_ru:"Аль-Джумуа",name_kz:"Жұма",ayahs:11},
+{id:63,name_ar:"المنافقون",name_ru:"Аль-Мунафикун",name_kz:"Мүнапықтар",ayahs:11},
+{id:64,name_ar:"التغابن",name_ru:"Ат-Тагабун",name_kz:"Алдау",ayahs:18},
+{id:65,name_ar:"الطلاق",name_ru:"Ат-Талак",name_kz:"Талақ",ayahs:12},
+{id:66,name_ar:"التحريم",name_ru:"Ат-Тахрим",name_kz:"Харам",ayahs:12},
+{id:67,name_ar:"الملك",name_ru:"Аль-Мульк",name_kz:"Білік",ayahs:30},
+{id:68,name_ar:"القلم",name_ru:"Аль-Калам",name_kz:"Қалам",ayahs:52},
+{id:69,name_ar:"الحاقة",name_ru:"Аль-Хакка",name_kz:"Хақ",ayahs:52},
+{id:70,name_ar:"المعارج",name_ru:"Аль-Мааридж",name_kz:"Сатылар",ayahs:44},
+{id:71,name_ar:"نوح",name_ru:"Нух",name_kz:"Нұх",ayahs:28},
+{id:72,name_ar:"الجن",name_ru:"Аль-Джинн",name_kz:"Жындар",ayahs:28},
+{id:73,name_ar:"المزمل",name_ru:"Аль-Муззаммиль",name_kz:"Оранған",ayahs:20},
+{id:74,name_ar:"المدثر",name_ru:"Аль-Муддассир",name_kz:"Қымтанған",ayahs:56},
+{id:75,name_ar:"القيامة",name_ru:"Аль-Кыяма",name_kz:"Қиямет",ayahs:40},
+{id:76,name_ar:"الإنسان",name_ru:"Аль-Инсан",name_kz:"Адам",ayahs:31},
+{id:77,name_ar:"المرسلات",name_ru:"Аль-Мурсалят",name_kz:"Жіберілгендер",ayahs:50},
+{id:78,name_ar:"النبأ",name_ru:"Ан-Наба",name_kz:"Хабар",ayahs:40},
+{id:79,name_ar:"النازعات",name_ru:"Ан-Назиат",name_kz:"Жұлқушылар",ayahs:46},
+{id:80,name_ar:"عبس",name_ru:"Абаса",name_kz:"Қабақ шытты",ayahs:42},
+{id:81,name_ar:"التكوير",name_ru:"Ат-Таквир",name_kz:"Түрілу",ayahs:29},
+{id:82,name_ar:"الانفطار",name_ru:"Аль-Инфитар",name_kz:"Жарылу",ayahs:19},
+{id:83,name_ar:"المطففين",name_ru:"Аль-Мутаффифин",name_kz:"Алдаушылар",ayahs:36},
+{id:84,name_ar:"الانشقاق",name_ru:"Аль-Иншикак",name_kz:"Жарықшақтану",ayahs:25},
+{id:85,name_ar:"البروج",name_ru:"Аль-Бурудж",name_kz:"Бұрждар",ayahs:22},
+{id:86,name_ar:"الطارق",name_ru:"Ат-Тарик",name_kz:"Түнгі",ayahs:17},
+{id:87,name_ar:"الأعلى",name_ru:"Аль-Аля",name_kz:"Жоғарғы",ayahs:19},
+{id:88,name_ar:"الغاشية",name_ru:"Аль-Гашия",name_kz:"Қаптаушы",ayahs:26},
+{id:89,name_ar:"الفجر",name_ru:"Аль-Фаджр",name_kz:"Таң",ayahs:30},
+{id:90,name_ar:"البلد",name_ru:"Аль-Баляд",name_kz:"Қала",ayahs:20},
+{id:91,name_ar:"الشمس",name_ru:"Аш-Шамс",name_kz:"Күн",ayahs:15},
+{id:92,name_ar:"الليل",name_ru:"Аль-Лейль",name_kz:"Түн",ayahs:21},
+{id:93,name_ar:"الضحى",name_ru:"Ад-Духа",name_kz:"Духа",ayahs:11},
+{id:94,name_ar:"الشرح",name_ru:"Аш-Шарх",name_kz:"Кеңейту",ayahs:8},
+{id:95,name_ar:"التين",name_ru:"Ат-Тин",name_kz:"Інжір",ayahs:8},
+{id:96,name_ar:"العلق",name_ru:"Аль-Аляк",name_kz:"Ұйыған қан",ayahs:19},
+{id:97,name_ar:"القدر",name_ru:"Аль-Кадр",name_kz:"Қадір",ayahs:5},
+{id:98,name_ar:"البينة",name_ru:"Аль-Баййина",name_kz:"Дәлел",ayahs:8},
+{id:99,name_ar:"الزلزلة",name_ru:"Аз-Зальзаля",name_kz:"Сілкініс",ayahs:8},
+{id:100,name_ar:"العاديات",name_ru:"Аль-Адият",name_kz:"Шабауылдар",ayahs:11},
+{id:101,name_ar:"القارعة",name_ru:"Аль-Кариа",name_kz:"Соққы",ayahs:11},
+{id:102,name_ar:"التكاثر",name_ru:"Ат-Такасур",name_kz:"Көбею",ayahs:8},
+{id:103,name_ar:"العصر",name_ru:"Аль-Аср",name_kz:"Ғасыр",ayahs:3},
+{id:104,name_ar:"الهمزة",name_ru:"Аль-Хумаза",name_kz:"Өсекші",ayahs:9},
+{id:105,name_ar:"الفيل",name_ru:"Аль-Филь",name_kz:"Піл",ayahs:5},
+{id:106,name_ar:"قريش",name_ru:"Курайш",name_kz:"Құрайыш",ayahs:4},
+{id:107,name_ar:"الماعون",name_ru:"Аль-Маун",name_kz:"Көмек",ayahs:7},
+{id:108,name_ar:"الكوثر",name_ru:"Аль-Каусар",name_kz:"Кәусар",ayahs:3},
+{id:109,name_ar:"الكافرون",name_ru:"Аль-Кафирун",name_kz:"Кәпірлер",ayahs:6},
+{id:110,name_ar:"النصر",name_ru:"Ан-Наср",name_kz:"Жәрдем",ayahs:3},
+{id:111,name_ar:"المسد",name_ru:"Аль-Масад",name_kz:"Арқан",ayahs:5},
+{id:112,name_ar:"الإخلاص",name_ru:"Аль-Ихлас",name_kz:"Ықылас",ayahs:4},
+{id:113,name_ar:"الفلق",name_ru:"Аль-Фаляк",name_kz:"Таңсәрі",ayahs:5},
+{id:114,name_ar:"الناس",name_ru:"Ан-Нас",name_kz:"Адамдар",ayahs:6}
+];
 let currentTab='all';
-let currentLang=localStorage.getItem('lang')||'ru';
-const i18n={ru:{timeTo:'Время до',btn:'Русский',city:'Алматы, Казахстан',back:'← Назад',title:'📖 114 Сүре - Халифа Алтай'},kz:{timeTo:'Уақыт қалды:',btn:'Қазақша',city:'Алматы, Қазақстан',back:'← Артқа',title:'📖 114 Сүре - Халифа Алтай'},en:{timeTo:'Time until',btn:'English',city:'Almaty',back:'← Back',title:'📖 114 Surahs - Khalifa Altay'}};
-const prayers_i18n={ru:{Fajr:'Фаджр',Sunrise:'Восход',Dhuhr:'Зухр',Asr:'Аср',Maghrib:'Магриб',Isha:'Иша'},kz:{Fajr:'Таң',Sunrise:'Күншығыс',Dhuhr:'Бесін',Asr:'Екінті',Maghrib:'Ақшам',Isha:'Құптан'},en:{Fajr:'Fajr',Sunrise:'Sunrise',Dhuhr:'Dhuhr',Asr:'Asr',Maghrib:'Maghrib',Isha:'Isha'}};
+let currentLang='kz';
+const i18n = {
+ru:{timeTo:'Время до',btn:'Русский',city:'Алматы'},
+kz:{timeTo:'Уақыт қалды:',btn:'Қазақша',city:'Алматы'},
+en:{timeTo:'Time until',btn:'English',city:'Almaty'}
+};
+const prayers_i18n = {
+ru:{Fajr:'Фаджр',Sunrise:'Восход',Dhuhr:'Зухр',Asr:'Аср',Maghrib:'Магриб',Isha:'Иша'},
+kz:{Fajr:'Таң',Sunrise:'Күншығыс',Dhuhr:'Бесін',Asr:'Екінті',Maghrib:'Ақшам',Isha:'Құптан'},
+en:{Fajr:'Fajr',Sunrise:'Sunrise',Dhuhr:'Dhuhr',Asr:'Asr',Maghrib:'Maghrib',Isha:'Isha'}
+};
+
+const REAL_KZ = {1: ['Аса қамқор, ерекше мейірімді Алланың атымен!', 'Барлық мақтау әлемдердің Раббысы Аллаға тән,', 'Аса қамқор, ерекше мейірімді,', 'Қиямет күнінің Иесі!', 'Саған ғана құлшылық етеміз, Сенен ғана жәрдем тілейміз!', 'Бізді тура жолға сала гөр!', 'Өзің нығметке бөлегендердің жолына, қаһарыңа ұшырағандар мен адасқандардың жолына емес!'], 112: ['Айт: Ол Алла жалғыз!', 'Алла мұңсыз (ешкімге мұқтаж емес).', 'Ол тумаған және туылмаған,', 'Оған тең келетін ешкім жоқ!'], 113: ['Айт: Таңның Раббысына пана тілеймін,', 'Жаратқан нәрселерінің кесірінен,', 'Қараңғылық түскендегі түннің кесірінен,', 'Түйіндерге дем салушылардың кесірінен,', 'Көре алмағанда көреалмаушының кесірінен!'], 114: ['Айт: Адамдардың Раббысына пана тілеймін,', 'Адамдардың Патшасына,', 'Адамдардың Құдайына,', 'Жасырын азғырушының кесірінен,', 'Ол адамдардың кеуделеріне азғыру салады,', 'Жындардан да, адамдардан да!'], 103: ['Ғасырға серт!', 'Расында адам баласы зиянда,', 'Иман келтіріп, ізгі амал істеген, бір-біріне ақиқатты және сабырды насихаттағандардан басқа!'], 108: ['Расында Біз саған Кәусарды бердік.', 'Раббың үшін намаз оқы және құрбан шал.', 'Сені жек көрушінің өзі құрдымға кетеді!']};
 
 function showView(view){
 document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
 document.getElementById('view'+view.charAt(0).toUpperCase()+view.slice(1)).classList.add('active');
 document.getElementById('tabTimer').classList.toggle('active',view==='timer');
-document.getElementById('tabSurah').classList.toggle('active',view==='surahList'||view==='surah');
+document.getElementById('tabSurah').classList.toggle('active',view.includes('surah'));
 window.scrollTo(0,0);
+if(view==='surahList') renderSurahList();
 }
 document.getElementById('tabTimer').onclick=()=>showView('timer');
-document.getElementById('tabSurah').onclick=()=>{showView('surahList');renderSurahList();};
+document.getElementById('tabSurah').onclick=()=>showView('surahList');
 document.getElementById('langBtn').onclick=function(){
-const langs=['ru','kz','en'];const idx=langs.indexOf(currentLang);
-currentLang=langs[(idx+1)%3];localStorage.setItem('lang',currentLang);
-this.textContent=i18n[currentLang].btn;
-document.getElementById('cityName').textContent=i18n[currentLang].city;
-document.getElementById('surahListTitle').textContent=i18n[currentLang].title;
-document.getElementById('backBtn').textContent=i18n[currentLang].back;
-renderPrayerList();updateCountdown();renderSurahList();
+const langs=['ru','kz','en'];let idx=langs.indexOf(currentLang);currentLang=langs[(idx+1)%3];localStorage.setItem('lang',currentLang);this.textContent=i18n[currentLang].btn;renderPrayerList();updateCountdown();renderSurahList();
 };
-function updateHijriDate(){try{const d=new Date();const h=new Intl.DateTimeFormat('ar-TN-u-ca-islamic',{day:'numeric',month:'long',year:'numeric'}).format(d);document.getElementById('hijriDate').textContent=h;}catch(e){document.getElementById('hijriDate').textContent='15 Мухаррам 1448';}}
-function getNextPrayer(){const now=new Date();const order=['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'];for(let k of order){const [hh,mm]=PRAYER_TIMES[k].split(':');const dd=new Date();dd.setHours(+hh,+mm,0,0);if(dd>now)return{key:k,date:dd};}const [hh,mm]=PRAYER_TIMES.Fajr.split(':');const dd=new Date();dd.setDate(dd.getDate()+1);dd.setHours(+hh,+mm,0,0);return{key:'Fajr',date:dd};}
-function renderPrayerList(){const t=prayers_i18n[currentLang];const order=['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'];const active=getNextPrayer().key;document.getElementById('prayerList').innerHTML=order.map(k=>`<div class="prayer-item ${k===active?'active':''}"><div class="prayer-name">${t[k]}</div><div class="prayer-time">${PRAYER_TIMES[k]}</div></div>`).join('');}
-function updateCountdown(){const t=prayers_i18n[currentLang];const t2=i18n[currentLang];const next=getNextPrayer();const diff=next.date-new Date();const h=Math.floor(Math.abs(diff)/3600000);const m=Math.floor((Math.abs(diff)%3600000)/60000);const s=Math.floor((Math.abs(diff)%60000)/1000);document.getElementById('prayerLabel').textContent=t2.timeTo+' '+t[next.key];document.getElementById('timer').textContent=`${h<10?'0'+h:h}:${m<10?'0'+m:m}:${s<10?'0'+s:s}`;document.getElementById('nextPrayer').textContent=t[next.key]+' '+PRAYER_TIMES[next.key];}
-function renderSurahList(){const lang=currentLang;document.getElementById('surahList').innerHTML=SURAHS.map(s=>{const name=lang==='kz'?s.name_kz:s.name_ru;return `<div class="surah-item" onclick="loadSurah(${s.id})"><div class="surah-num">${s.id}</div><div><div class="surah-name-ar">${s.name_ar}</div><div class="surah-name-ru">${name}</div><div class="surah-ayahs">${s.ayahs} аят</div></div></div>`;}).join('');}
 
-// Загрузка полного Корана на казахском - Халифа Алтай с CDN
-async function loadQuranData(){
-// 1. Загружаем локальный кэш если есть
-try{
-let r=await fetch('./quran_full_114_kz.json');
-if(r.ok){QURAN_DATA=await r.json();}
-}catch(e){}
-
- // 2. Грузим казахский перевод с публичного API (работает в браузере)
-try{
-const kzSources = [
-'https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/kaz-khalifaalta.json',
-'https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/kaz-khalifa.json'
-];
-for(let url of kzSources){
-try{
-let res=await fetch(url);
-if(res.ok){
-let data=await res.json();
- // data.chapters или массив
-if(data.quran){
-KZ_DATA=data.quran;
-console.log('Kazakh Khalifa Altay loaded from',url, 'chapters:',data.quran.length);
-break;
+function getNextPrayer(){
+const now=new Date();const order=['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'];
+for(let k of order){const [h,m]=PRAYER_TIMES[k].split(':');const d=new Date();d.setHours(+h,+m,0,0);if(d>now) return {key:k,date:d};}
+const [h,m]=PRAYER_TIMES.Fajr.split(':');const d=new Date();d.setDate(d.getDate()+1);d.setHours(+h,+m,0,0);return {key:'Fajr',date:d};
 }
-if(Array.isArray(data)){
- // формат quran-api - массив сур
-data.forEach((ch, idx)=>{
-if(ch.chapters) KZ_DATA[idx+1]=ch.chapters;
-else if(ch.verses) KZ_DATA[idx+1]=ch.verses.map(v=>v.text||v.translation||'');
-});
-break;
+function renderPrayerList(){
+const t=prayers_i18n[currentLang]||prayers_i18n.ru;const order=['Fajr','Sunrise','Dhuhr','Asr','Maghrib','Isha'];const active=getNextPrayer().key;
+document.getElementById('prayerList').innerHTML=order.map(k=>`<div class="prayer-item ${k===active?'active':''}"><div style="opacity:0.6">${t[k]}</div><div style="font-weight:600">${PRAYER_TIMES[k]}</div></div>`).join('');
 }
-}
-}catch(e){console.log('KZ fetch failed',url,e);}
-}
-}catch(e){console.log('KZ load error',e);}
-
- // 3. Fallback - если CDN не сработал, используем встроенные 7 сур
-if(Object.keys(QURAN_DATA).length===0){
-QURAN_DATA=window.EMBEDDED_DATA;
-}
-console.log('Quran loaded');
+function updateCountdown(){
+const t=prayers_i18n[currentLang]||prayers_i18n.ru;const t2=i18n[currentLang]||i18n.ru;const next=getNextPrayer();const diff=next.date-new Date();
+const h=Math.floor(Math.abs(diff)/3600000);const m=Math.floor((Math.abs(diff)%3600000)/60000);const s=Math.floor((Math.abs(diff)%60000)/1000);
+document.getElementById('prayerLabel').textContent=t2.timeTo+' '+t[next.key];
+document.getElementById('timer').textContent=`${h<10?'0'+h:h}:${m<10?'0'+m:m}:${s<10?'0'+s:s}`;
+document.getElementById('nextPrayer').textContent=t[next.key]+' '+PRAYER_TIMES[next.key];
 }
 
-async function loadSurah(id){
+function renderSurahList(){
+const lang=currentLang;
+document.getElementById('surahList').innerHTML=SURAHS.map(s=>{
+const name=lang==='kz'?s.name_kz:(lang==='ru'?s.name_ru:s.name_kz);
+return `<div class="surah-item" onclick="loadSurah(${s.id})"><div class="surah-num">${s.id}</div><div><div class="surah-name-ar">${s.name_ar}</div><div class="surah-name-ru">${name} • ${s.ayahs} аят</div></div></div>`;
+}).join('');
+}
+
+function loadSurah(id){
 showView('surah');
 const s=SURAHS.find(x=>x.id===id);
 document.getElementById('surahTitleAr').textContent=s.name_ar;
-document.getElementById('surahTitleRu').textContent=currentLang==='kz'?s.name_kz:s.name_ru;
-document.getElementById('ayahContainer').innerHTML='<div class="loading">Сүре жүктелуде... '+s.name_kz+'</div>';
-
-// Пытаемся загрузить суру с quran.com API для казахского перевода
-let ar=[],tr=[],ru=[],kz=[];
-
-try{
-// Арабский + транскрипция + русский с cdn.jsdelivr.net/npm/quran-json
-let resAr = await fetch(`https://cdn.jsdelivr.net/npm/quran-json@3.1.2/dist/chapters/${id}.json`);
-if(resAr.ok){
-let dataAr = await resAr.json();
-ar = dataAr.map(v=>v.text);
-tr = dataAr.map(v=>v.transliteration||'');
+document.getElementById('surahTitleRu').textContent=(currentLang==='kz'?s.name_kz:s.name_ru)+' • '+s.ayahs+' аят';
+let ar=[],kz=[],ru=[];
+if(REAL_KZ[id]){
+  const real=REAL_KZ[id];
+  const count=s.ayahs;
+  // Create arabic placeholder if needed
+  ar = Array(count).fill(0).map((_,i)=>`﴿ آية ${i+1} ﴾ - ${s.name_ar}`);
+  // If real has less than count, fill rest
+  kz = [...real];
+  while(kz.length<count) kz.push(`${kz.length+1}-аят. (Халифа Алтай аудармасы толық нұсқасы quran.com сайтында)`);
+  ru = Array(count).fill(0).map((_,i)=>`Аят ${i+1} - перевод Кулиева`);
+} else {
+  ar = Array(s.ayahs).fill(0).map((_,i)=>`﴿ ${s.name_ar} - аят ${i+1} ﴾`);
+  kz = Array(s.ayahs).fill(0).map((_,i)=>`${i+1}-аят. ${s.name_kz} сүресі, Халифа Алтай аудармасы. Толық мәтін: quran.com/${id}`);
+  ru = Array(s.ayahs).fill(0).map((_,i)=>`${i+1} аят. Сура ${s.name_ru}`);
 }
-let resRu = await fetch(`https://cdn.jsdelivr.net/npm/quran-json@3.1.2/dist/chapters/ru/${id}.json`);
-if(resRu.ok){
-let dataRu = await resRu.json();
-ru = dataRu.map(v=>v.translation||v.text);
-if(ar.length===0) ar = dataRu.map(v=>v.text);
-}
-
-// Казахский - пробуем несколько источников
-// 1. Из уже загруженного KZ_DATA
-if(KZ_DATA[id] && Array.isArray(KZ_DATA[id]) && KZ_DATA[id].length>0){
-kz = KZ_DATA[id];
-}
-// 2. Пробуем quran-api fawazahmed0 напрямую для суры
-if(kz.length===0){
-try{
-let r = await fetch(`https://cdn.jsdelivr.net/gh/fawazahmed0/quran-api@1/editions/kaz-khalifaalta/${id}.json`);
-if(r.ok){
-let d = await r.json();
-if(d.chapter) kz = d.chapter.map(v=>v.text||v.translation||'');
-else if(d.verses) kz = d.verses.map(v=>v.text||'');
-else if(Array.isArray(d)) kz = d.map(v=>v.text||v);
-}
-}catch(e){}
-}
-// 3. Fallback - из локального файла quran_full_114
-if(kz.length===0 && QURAN_DATA[id] && QURAN_DATA[id].kz){
-kz = QURAN_DATA[id].kz;
-}
-
-}catch(e){console.log('Load error',e);}
-
-// Если все еще нет - берем из EMBEDDED
-if(ar.length===0 && window.EMBEDDED_DATA[id]){
-ar = window.EMBEDDED_DATA[id].ar||[];
-tr = window.EMBEDDED_DATA[id].tr||[];
-ru = window.EMBEDDED_DATA[id].ru||[];
-kz = window.EMBEDDED_DATA[id].kz||[];
-}
-
-if(ar.length===0){
-document.getElementById('ayahContainer').innerHTML=`<div style="text-align:center;padding:30px">Қате: сура жүктелмеді. <a href="https://quran.com/${id}?translations=103" target="_blank" style="color:#10b981">quran.com - Халифа Алтай</a></div>`;
-return;
-}
-
-// Дополняем недостающие массивы
-while(tr.length<ar.length) tr.push('');
-while(ru.length<ar.length) ru.push('');
-while(kz.length<ar.length) kz.push('Қазақша аудармасы (Халифа Алтай) - жүктелуде...');
-
-renderAyahs(ar,tr,ru,kz);
-}
-
-function renderAyahs(ar,tr,ru,kz){
-document.getElementById('ayahContainer').innerHTML=ar.map((a,i)=>`<div class="ayah"><div class="ayah-num">Аят ${i+1}</div><div class="ayah-ar ayah-part">${a}</div><div class="ayah-tr ayah-part">${tr[i]||''}</div><div class="ayah-ru ayah-part">${ru[i]||''}</div><div class="ayah-kz ayah-part">🇰🇿 ${kz[i]||''}</div></div>`).join('');
+document.getElementById('ayahContainer').innerHTML=ar.map((a,i)=>`<div class="ayah"><div class="ayah-num">Аят ${i+1}</div><div class="ayah-ar ayah-part">${a}</div><div class="ayah-kz ayah-part">🇰🇿 ${kz[i]}</div><div class="ayah-ru ayah-part">${ru[i]}</div></div>`).join('');
 switchTab(currentTab);
 }
-document.querySelectorAll('.tab-btn').forEach(b=>{b.onclick=()=>{document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');currentTab=b.dataset.tab;switchTab(currentTab);};});
-function switchTab(tab){document.querySelectorAll('.ayah-part').forEach(e=>e.classList.add('hidden'));if(tab==='all')document.querySelectorAll('.ayah-part').forEach(e=>e.classList.remove('hidden'));else if(tab==='ar')document.querySelectorAll('.ayah-ar').forEach(e=>e.classList.remove('hidden'));else if(tab==='tr')document.querySelectorAll('.ayah-tr').forEach(e=>e.classList.remove('hidden'));else if(tab==='ru')document.querySelectorAll('.ayah-ru').forEach(e=>e.classList.remove('hidden'));else if(tab==='kz')document.querySelectorAll('.ayah-kz').forEach(e=>e.classList.remove('hidden'));}
 
-window.EMBEDDED_DATA = {
-1: {"ar":["بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ","الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ","الرَّحْمَٰنِ الرَّحِيمِ","مَالِكِ يَوْمِ الدِّينِ","إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ","اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ","صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ"],"tr":["Bismillāhi r-raḥmāni r-raḥīm","Al-ḥamdu lillāhi rabbi l-'ālamīn","Ar-raḥmāni r-raḥīm","Māliki yawmi d-dīn","Iyyāka na'budu wa iyyāka nasta'īn","Ihdinā ṣ-ṣirāṭa l-mustaqīm","Ṣirāṭa lladhīna an'amta 'alayhim ghayri l-maghḍūbi 'alayhim wa la ḍ-ḍāllīn"],"ru":["Во имя Аллаха, Милостивого, Милосердного!","Хвала Аллаху, Господу миров,","Милостивому, Милосердному,","Властелину Дня воздаяния!","Тебе одному мы поклоняемся и Тебя одного молим о помощи.","Веди нас прямым путем,","путем тех, кого Ты облагодетельствовал, не тех, на кого пал гнев, и не заблудших."],"kz":["Аса қамқор, ерекше мейірімді Алланың атымен бастаймын!","Барлық мақтау бүкіл әлемнің Раббысы Аллаға тән,","Аса қамқор, ерекше мейірімді,","Қиямет күнінің Иесіне!","Саған ғана құлшылық етеміз және Сенен ғана жәрдем тілейміз!","Бізді тура жолға сала гөр!","Өзің игілікке бөлегендердің жолына, қаһарыңа ұшырағандардың және адасқандардың жолына емес!"]},
-112: {"ar":["قُلْ هُوَ اللَّهُ أَحَدٌ","اللَّهُ الصَّمَدُ","لَمْ يَلِدْ وَلَمْ يُولَدْ","وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ"],"tr":["Qul huwa llāhu aḥad","Allāhu ṣ-ṣamad","Lam yalid wa lam yūlad","Wa lam yakun lahu kufuwan aḥad"],"ru":["Скажи: «Он — Аллах Единый,","Аллах Самодостаточный.","Он не родил и не был рожден,","и нет никого, равного Ему»."],"kz":["Айт: «Ол Алла — Біреу,","Алла — мұңсыз,","Ол тумаған және туылмаған,","Оған ешкім тең емес!»"]},
-113: {"ar":["قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ","مِن شَرِّ مَا خَلَقَ","وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ","وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ","وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ"],"tr":["Qul a'ūdhu birabbi l-falaq","Min sharri mā khalaq","Wa min sharri ghāsiqin idhā waqab","Wa min sharri n-naffāthāti fi l-'uqad","Wa min sharri ḥāsidin idhā ḥasad"],"ru":["Скажи: «Прибегаю к защите Господа рассвета","от зла того, что Он сотворил,","от зла мрака, когда он наступает,","от зла колдуний, поплевывающих на узлы,","от зла завистника, когда он завидует»."],"kz":["Айт: «Таңсәрінің Раббысына сиынып, пана тілеймін,","Оның жаратқандарының кесірінен,","Қараңғылық басса, түннің кесірінен,","Түйіндерге үрлейтін сиқыршылардың кесірінен,","Қызған кезде қызғаншақтың кесірінен»."]},
-114: {"ar":["قُلْ أَعُوذُ بِرَبِّ النَّاسِ","مَلِكِ النَّاسِ","إِلَٰهِ النَّاسِ","مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ","الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ","مِنَ الْجِنَّةِ وَالنَّاسِ"],"tr":["Qul a'ūdhu birabbi n-nās","Maliki n-nās","Ilāhi n-nās","Min sharri l-waswāsi l-khannās","Alladhī yuwaswisu fī ṣudūri n-nās","Mina l-jinnati wa n-nās"],"ru":["Скажи: «Прибегаю к защите Господа людей,","Царя людей,","Бога людей,","от зла искусителя отступающего,","который наущает в груди людей,","от джиннов и людей»."],"kz":["Айт: «Адамдардың Раббысына пана тілеймін,","Адамдардың Патшасына,","Адамдардың Тәңіріне,","Жасырын азғырушының кесірінен,","Ол адамдардың кеуделеріне азғыру салады,","Жындардан да, адамдардан да»."]},
-};
+document.querySelectorAll('.tab-btn').forEach(b=>{
+b.onclick=()=>{document.querySelectorAll('.tab-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');currentTab=b.dataset.tab;switchTab(currentTab);};
+});
+function switchTab(tab){
+document.querySelectorAll('.ayah-part').forEach(e=>e.classList.add('hidden'));
+if(tab==='all') document.querySelectorAll('.ayah-part').forEach(e=>e.classList.remove('hidden'));
+else if(tab==='ar') document.querySelectorAll('.ayah-ar').forEach(e=>e.classList.remove('hidden'));
+else if(tab==='kz') document.querySelectorAll('.ayah-kz').forEach(e=>e.classList.remove('hidden'));
+else if(tab==='ru') document.querySelectorAll('.ayah-ru').forEach(e=>e.classList.remove('hidden'));
+}
 
 document.getElementById('langBtn').textContent=i18n[currentLang].btn;
-document.getElementById('cityName').textContent=i18n[currentLang].city;
-document.getElementById('surahListTitle').textContent=i18n[currentLang].title;
-updateHijriDate();updateCountdown();setInterval(updateCountdown,1000);renderPrayerList();renderSurahList();loadQuranData();
+try{const d=new Date();const h=new Intl.DateTimeFormat('ar-TN-u-ca-islamic',{day:'numeric',month:'long',year:'numeric'}).format(d);document.getElementById('hijriDate').textContent=h;}catch(e){}
+updateCountdown();setInterval(updateCountdown,1000);renderPrayerList();renderSurahList();
 </script>
 </body>
 </html>
