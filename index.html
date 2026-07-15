@@ -7,159 +7,48 @@
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;600;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Manrope', sans-serif;
-            min-height: 100vh;
-            color: white;
-            background: #0f172a;
-        }
-      .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            background: rgba(0,0,0,0.6);
-            border-bottom: 1px solid rgba(255,255,255,0.15);
-        }
-      .logo { font-size: 24px; font-weight: 800; cursor: pointer; }
-      .controls { display: flex; gap: 8px; }
-      .btn {
-            background: rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.3);
-            color: white;
-            padding: 8px 14px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-        }
-      .btn.active { background: #10b981; }
-      .main { padding: 20px; }
+        body { font-family: 'Manrope', sans-serif; min-height: 100vh; color: white; background: #0f172a; }
+      .header { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: rgba(0,0,0,0.6); border-bottom: 1px solid rgba(255,255,255,0.15); position: sticky; top: 0; z-index: 100; flex-wrap: wrap; gap: 8px; }
+      .logo { font-size: 20px; font-weight: 800; cursor: pointer; }
+      .controls { display: flex; gap: 6px; flex-wrap: wrap; }
+      .btn { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); color: white; padding: 7px 12px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 13px; font-family: inherit; }
+      .btn.active { background: #10b981; border-color: #10b981; }
+      .main { padding: 15px; }
       .container { max-width: 900px; margin: 0 auto; }
-      .glass {
-            background: rgba(0,0,0,0.5);
-            padding: 30px 25px;
-            border-radius: 24px;
-            border: 1px solid rgba(255,255,255,0.2);
-            margin-bottom: 20px;
-        }
+      .glass { background: rgba(0,0,0,0.45); padding: 20px 15px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.15); margin-bottom: 15px; }
       .center { text-align: center; }
-      .city { font-size: 18px; opacity: 0.9; margin-bottom: 8px; }
-      .hijri { font-size: 14px; opacity: 0.7; margin-bottom: 16px; }
-      .label { font-size: 16px; opacity: 0.8; margin-bottom: 16px; }
-      .time { font-size: 64px; font-weight: 800; margin-bottom: 10px; }
-      .next-prayer { font-size: 14px; opacity: 0.7; margin-bottom: 20px; }
-      .prayer-list {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 25px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255,255,255,0.15);
-        }
+      .city { font-size: 16px; opacity: 0.9; margin-bottom: 6px; }
+      .hijri { font-size: 12px; opacity: 0.6; margin-bottom: 12px; }
+      .label { font-size: 14px; opacity: 0.8; margin-bottom: 12px; }
+      .time { font-size: 52px; font-weight: 800; margin-bottom: 8px; line-height: 1; }
+      .next-prayer { font-size: 13px; opacity: 0.7; margin-bottom: 15px; }
+      .prayer-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1); }
       .prayer-item { font-size: 11px; text-align: center; }
-      .prayer-name { opacity: 0.7; margin-bottom: 4px; }
+      .prayer-name { opacity: 0.6; margin-bottom: 3px; }
       .prayer-time { font-weight: 600; }
       .prayer-item.active { color: #10b981; }
-      .quran-btn {
-            background: #10b981;
-            border: none;
-            color: white;
-            padding: 16px 40px;
-            font-size: 18px;
-            font-weight: 600;
-            border-radius: 14px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            margin: 6px;
-        }
+      .quran-btn { background: #10b981; border: none; color: white; padding: 12px 20px; font-size: 15px; font-weight: 600; border-radius: 12px; cursor: pointer; text-decoration: none; display: inline-block; margin: 4px; font-family: inherit; }
       .quran-btn.blue { background: #3b82f6; }
-      .title { font-size: 28px; font-weight: 800; margin-bottom: 20px; text-align: center; }
-      .surah-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-        }
-      .surah-item {
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            padding: 15px;
-            border-radius: 14px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-      .surah-item:hover { background: rgba(16,185,129,0.3); }
-      .surah-num {
-            background: #10b981;
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            flex-shrink: 0;
-        }
-      .surah-name-ar { font-family: 'Amiri', serif; font-size: 20px; margin-bottom: 4px; }
-      .surah-name-ru { font-size: 14px; opacity: 0.8; }
-      .surah-ayahs { font-size: 12px; opacity: 0.6; }
-      .surah-header { text-align: center; margin-bottom: 30px; }
-      .surah-title-ar { font-family: 'Amiri', serif; font-size: 42px; margin-bottom: 8px; }
-      .surah-title-ru { font-size: 20px; opacity: 0.8; }
-      .tabs {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-        }
-      .tab-btn {
-            background: rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.3);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 600;
-        }
+      .title { font-size: 22px; font-weight: 800; margin-bottom: 15px; text-align: center; }
+      .surah-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+      .surah-item { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); padding: 12px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 12px; }
+      .surah-item:hover { background: rgba(16,185,129,0.25); }
+      .surah-num { background: #10b981; width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; flex-shrink: 0; }
+      .surah-name-ar { font-family: 'Amiri', serif; font-size: 18px; }
+      .surah-name-ru { font-size: 13px; opacity: 0.8; }
+      .surah-ayahs { font-size: 11px; opacity: 0.5; }
+      .surah-header { text-align: center; margin-bottom: 20px; }
+      .surah-title-ar { font-family: 'Amiri', serif; font-size: 34px; margin-bottom: 6px; }
+      .surah-title-ru { font-size: 16px; opacity: 0.8; }
+      .tabs { display: flex; gap: 6px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
+      .tab-btn { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); color: white; padding: 8px 14px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 13px; font-family: inherit; }
       .tab-btn.active { background: #10b981; }
-      .ayah {
-            margin-bottom: 25px;
-            padding-bottom: 25px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-      .ayah-num {
-            display: inline-block;
-            background: rgba(16,185,129,0.3);
-            border: 1px solid #10b981;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            margin-bottom: 12px;
-        }
-      .ayah-ar {
-            font-family: 'Amiri', serif;
-            font-size: 28px;
-            line-height: 2;
-            text-align: right;
-            direction: rtl;
-            margin-bottom: 12px;
-        }
-      .ayah-tr {
-            font-size: 16px;
-            line-height: 1.8;
-            opacity: 0.9;
-            margin-bottom: 12px;
-            font-style: italic;
-        }
-      .ayah-ru {
-            font-size: 16px;
-            line-height: 1.8;
-            opacity: 0.85;
-        }
+      .ayah { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+      .ayah-num { display: inline-block; background: rgba(16,185,129,0.25); border: 1px solid #10b981; padding: 3px 10px; border-radius: 15px; font-size: 11px; margin-bottom: 10px; }
+      .ayah-ar { font-family: 'Amiri', serif; font-size: 24px; line-height: 1.9; text-align: right; direction: rtl; margin-bottom: 10px; }
+      .ayah-tr { font-size: 14px; line-height: 1.6; opacity: 0.85; margin-bottom: 8px; font-style: italic; }
+      .ayah-ru { font-size: 14px; line-height: 1.6; opacity: 0.85; margin-bottom: 6px; }
+      .ayah-kz { font-size: 14px; line-height: 1.6; opacity: 0.9; color: #fcd34d; margin-bottom: 6px; }
       .hidden { display: none!important; }
       .view { display: none; }
       .view.active { display: block; }
@@ -174,81 +63,135 @@
             <button class="btn" id="langBtn">Русский</button>
         </div>
     </header>
-
     <main class="main">
         <div class="container">
             <div class="view active" id="viewTimer">
                 <div class="glass center">
-                    <div class="city">Алматы, Казахстан</div>
-                    <div class="hijri" id="hijriDate">15 Мухаррам 1448</div>
+                    <div class="city" id="cityName">Алматы, Казахстан</div>
+                    <div class="hijri" id="hijriDate"></div>
                     <div class="label" id="prayerLabel">Время до намаза</div>
                     <div class="time" id="timer">00:00:00</div>
                     <div class="next-prayer" id="nextPrayer"></div>
                     <div class="prayer-list" id="prayerList"></div>
-                    <a href="https://quran.com" target="_blank" class="quran-btn">📖 Читать Коран</a>
-                    <button class="quran-btn blue" onclick="showView('surahList')">📚 Все суры</button>
+                    <button class="quran-btn blue" onclick="showView('surahList')">📚 Все 114 сур</button>
                 </div>
-            </div>
-
             <div class="view" id="viewSurahList">
                 <div class="glass">
-                    <h1 class="title">📖 Суры Священного Корана</h1>
+                    <h1 class="title" id="surahListTitle">📖 Суры Священного Корана - 114</h1>
                     <div class="surah-grid" id="surahList"></div>
                 </div>
-            </div>
-
             <div class="view" id="viewSurah">
                 <div class="glass">
-                    <button class="btn" onclick="showView('surahList')" style="margin-bottom: 20px;">← Назад к списку</button>
+                    <button class="btn" onclick="showView('surahList')" style="margin-bottom: 15px;" id="backBtn">← Назад</button>
                     <div class="surah-header">
                         <div class="surah-title-ar" id="surahTitleAr"></div>
                         <div class="surah-title-ru" id="surahTitleRu"></div>
                     </div>
                     <div class="tabs">
-                        <button class="tab-btn active" data-tab="all">Все вместе</button>
-                        <button class="tab-btn" data-tab="ar">Арабский</button>
+                        <button class="tab-btn active" data-tab="all">Все</button>
+                        <button class="tab-btn" data-tab="ar">عربي</button>
                         <button class="tab-btn" data-tab="tr">Транскрипция</button>
                         <button class="tab-btn" data-tab="ru">Русский</button>
+                        <button class="tab-btn" data-tab="kz">Қазақша</button>
                     </div>
                     <div id="ayahContainer"></div>
                 </div>
             </div>
         </div>
     </main>
-
     <script>
-        const PRAYER_TIMES = {
-            Fajr: '03:45', Sunrise: '05:25', Dhuhr: '13:15',
-            Asr: '17:25', Maghrib: '20:50', Isha: '22:30'
-        };
-
+        const PRAYER_TIMES = { Fajr: '03:45', Sunrise: '05:25', Dhuhr: '13:15', Asr: '17:25', Maghrib: '20:50', Isha: '22:30' };
         const SURAHS = [
-            {id:1,name_ar:"الفَاتِحَة",name_ru:"Аль-Фатиха",ayahs:7},
-            {id:112,name_ar:"الإخْلَاص",name_ru:"Аль-Ихлас",ayahs:4},
-            {id:113,name_ar:"الفَلَق",name_ru:"Аль-Фаляк",ayahs:5},
-            {id:114,name_ar:"النَّاس",name_ru:"Ан-Нас",ayahs:6}
+            {id:1,name_ar:"الفَاتِحَة",name_ru:"Аль-Фатиха",name_kz:"Фатиха",ayahs:7},
+            {id:2,name_ar:"البَقَرَة",name_ru:"Аль-Бакара",name_kz:"Бақара",ayahs:286},
+            {id:3,name_ar:"آل عِمرَان",name_ru:"Али Имран",name_kz:"Имран әулеті",ayahs:200},
+            {id:4,name_ar:"النِّسَاء",name_ru:"Ан-Ниса",name_kz:"Әйелдер",ayahs:176},
+            {id:5,name_ar:"المَائدة",name_ru:"Аль-Маида",name_kz:"Дастархан",ayahs:120},
+            {id:36,name_ar:"يس",name_ru:"Ясин",name_kz:"Ясин",ayahs:83},
+            {id:55,name_ar:"الرَّحمن",name_ru:"Ар-Рахман",name_kz:"Рахман",ayahs:78},
+            {id:56,name_ar:"الوَاقِعَة",name_ru:"Аль-Вакиа",name_kz:"Оқиға",ayahs:96},
+            {id:67,name_ar:"المُلْك",name_ru:"Аль-Мульк",name_kz:"Білік",ayahs:30},
+            {id:78,name_ar:"النَّبَأ",name_ru:"Ан-Наба",name_kz:"Хабар",ayahs:40},
+            {id:79,name_ar:"النَّازعَات",name_ru:"Ан-Назиат",name_kz:"Жұлқушылар",ayahs:46},
+            {id:80,name_ar:"عَبَس",name_ru:"Абаса",name_kz:"Қабақ шытты",ayahs:42},
+            {id:81,name_ar:"التَّكوير",name_ru:"Ат-Таквир",name_kz:"Түрю",ayahs:29},
+            {id:82,name_ar:"الانفِطار",name_ru:"Аль-Инфитар",name_kz:"Жарылу",ayahs:19},
+            {id:83,name_ar:"المُطَفِّفين",name_ru:"Аль-Мутаффифин",name_kz:"Өлшеуден кеміткендер",ayahs:36},
+            {id:84,name_ar:"الانشقَاق",name_ru:"Аль-Иншикак",name_kz:"Жарықшақтану",ayahs:25},
+            {id:85,name_ar:"البُروج",name_ru:"Аль-Бурудж",name_kz:"Бұрждар",ayahs:22},
+            {id:86,name_ar:"الطَّارِق",name_ru:"Ат-Тарик",name_kz:"Түнгі жұлдыз",ayahs:17},
+            {id:87,name_ar:"الأعلَى",name_ru:"Аль-Аля",name_kz:"Ең Жоғарғы",ayahs:19},
+            {id:88,name_ar:"الغَاشِية",name_ru:"Аль-Гашия",name_kz:"Қаптаушы",ayahs:26},
+            {id:89,name_ar:"الفَجْر",name_ru:"Аль-Фаджр",name_kz:"Таң",ayahs:30},
+            {id:90,name_ar:"البَلَد",name_ru:"Аль-Баляд",name_kz:"Қала",ayahs:20},
+            {id:91,name_ar:"الشَّمس",name_ru:"Аш-Шамс",name_kz:"Күн",ayahs:15},
+            {id:92,name_ar:"اللَّيْل",name_ru:"Аль-Лейль",name_kz:"Түн",ayahs:21},
+            {id:93,name_ar:"الضُّحَى",name_ru:"Ад-Духа",name_kz:"Шашыраған жарық",ayahs:11},
+            {id:94,name_ar:"الشَّرْح",name_ru:"Аш-Шарх",name_kz:"Кеңейту",ayahs:8},
+            {id:95,name_ar:"التِّين",name_ru:"Ат-Тин",name_kz:"Інжір",ayahs:8},
+            {id:96,name_ar:"العَلَق",name_ru:"Аль-Аляк",name_kz:"Ұйыған қан",ayahs:19},
+            {id:97,name_ar:"القَدْر",name_ru:"Аль-Кадр",name_kz:"Қадір",ayahs:5},
+            {id:98,name_ar:"البَيِّنَة",name_ru:"Аль-Баййина",name_kz:"Айқын дәлел",ayahs:8},
+            {id:99,name_ar:"الزَّلزَلة",name_ru:"Аз-Зальзаля",name_kz:"Сілкініс",ayahs:8},
+            {id:100,name_ar:"العَادِيات",name_ru:"Аль-Адият",name_kz:"Шабауылдар",ayahs:11},
+            {id:101,name_ar:"القَارِعة",name_ru:"Аль-Кариа",name_kz:"Соққы",ayahs:11},
+            {id:102,name_ar:"التَّكَاثر",name_ru:"Ат-Такасур",name_kz:"Көбеюге берілу",ayahs:8},
+            {id:103,name_ar:"العَصْر",name_ru:"Аль-Аср",name_kz:"Ғасыр",ayahs:3},
+            {id:104,name_ar:"الهُمَزَة",name_ru:"Аль-Хумаза",name_kz:"Өсекші",ayahs:9},
+            {id:105,name_ar:"الفِيل",name_ru:"Аль-Филь",name_kz:"Піл",ayahs:5},
+            {id:106,name_ar:"قُرَيْش",name_ru:"Курайш",name_kz:"Құрайыш",ayahs:4},
+            {id:107,name_ar:"المَاعُون",name_ru:"Аль-Маун",name_kz:"Көмек",ayahs:7},
+            {id:108,name_ar:"الكَوْثَر",name_ru:"Аль-Каусар",name_kz:"Кәусар",ayahs:3},
+            {id:109,name_ar:"الكافِرون",name_ru:"Аль-Кафирун",name_kz:"Кәпірлер",ayahs:6},
+            {id:110,name_ar:"النَّصْر",name_ru:"Ан-Наср",name_kz:"Жәрдем",ayahs:3},
+            {id:111,name_ar:"المَسَد",name_ru:"Аль-Масад",name_kz:"Арқан",ayahs:5},
+            {id:112,name_ar:"الإخْلَاص",name_ru:"Аль-Ихлас",name_kz:"Ықылас",ayahs:4},
+            {id:113,name_ar:"الفَلَق",name_ru:"Аль-Фаляк",name_kz:"Таңсәрі",ayahs:5},
+            {id:114,name_ar:"النَّاس",name_ru:"Ан-Нас",name_kz:"Адамдар",ayahs:6}
         ];
 
         const QURAN_DATA = {
             1: {
                 ar: ["بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ","الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ","الرَّحْمَٰنِ الرَّحِيمِ","مَالِكِ يَوْمِ الدِّينِ","إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ","اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ","صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ"],
                 tr: ["Bismillāhi r-raḥmāni r-raḥīm","Al-ḥamdu lillāhi rabbi l-'ālamīn","Ar-raḥmāni r-raḥīm","Māliki yawmi d-dīn","Iyyāka na'budu wa iyyāka nasta'īn","Ihdinā ṣ-ṣirāṭa l-mustaqīm","Ṣirāṭa lladhīna an'amta 'alayhim ghayri l-maghḍūbi 'alayhim wa la ḍ-ḍāllīn"],
-                ru: ["Во имя Аллаха, Милостивого, Милосердного!","Хвала Аллаху, Господу миров,","Милостивому, Милосердному,","Властелину Дня воздаяния!","Тебе одному мы поклоняемся и Тебя одного молим о помощи.","Веди нас прямым путем,","путем тех, кого Ты облагодетельствовал, не тех, на кого пал гнев, и не заблудших."]
+                ru: ["Во имя Аллаха, Милостивого, Милосердного!","Хвала Аллаху, Господу миров,","Милостивому, Милосердному,","Властелину Дня воздаяния!","Тебе одному мы поклоняемся и Тебя одного молим о помощи.","Веди нас прямым путем,","путем тех, кого Ты облагодетельствовал, не тех, на кого пал гнев, и не заблудших."],
+                kz: ["Аса қамқор, ерекше мейірімді Алланың атымен бастаймын!","Барлық мақтау бүкіл әлемнің Раббысы Аллаға тән,","Аса қамқор, ерекше мейірімді,","Қиямет күнінің Иесіне!","Саған ғана құлшылық етеміз және Сенен ғана жәрдем тілейміз!","Бізді тура жолға сала гөр!","Өзің игілікке бөлегендердің жолына, қаһарыңа ұшырағандардың және адасқандардың жолына емес!"]
             },
             112: {
                 ar: ["قُلْ هُوَ اللَّهُ أَحَدٌ","اللَّهُ الصَّمَدُ","لَمْ يَلِدْ وَلَمْ يُولَدْ","وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ"],
                 tr: ["Qul huwa llāhu aḥad","Allāhu ṣ-ṣamad","Lam yalid wa lam yūlad","Wa lam yakun lahu kufuwan aḥad"],
-                ru: ["Скажи: «Он — Аллах Единый,","Аллах Самодостаточный.","Он не родил и не был рожден,","и нет никого, равного Ему»."]
+                ru: ["Скажи: «Он — Аллах Единый,","Аллах Самодостаточный.","Он не родил и не был рожден,","и нет никого, равного Ему»."],
+                kz: ["Айт: «Ол Алла — Біреу,","Алла — мұңсыз,","Ол тумаған және туылмаған,","Оған ешкім тең емес!»"]
             },
             113: {
                 ar: ["قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ","مِن شَرِّ مَا خَلَقَ","وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ","وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ","وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ"],
                 tr: ["Qul a'ūdhu birabbi l-falaq","Min sharri mā khalaq","Wa min sharri ghāsiqin idhā waqab","Wa min sharri n-naffāthāti fi l-'uqad","Wa min sharri ḥāsidin idhā ḥasad"],
-                ru: ["Скажи: «Прибегаю к защите Господа рассвета","от зла того, что Он сотворил,","от зла мрака, когда он наступает,","от зла колдуний, поплевывающих на узлы,","от зла завистника, когда он завидует»."]
+                ru: ["Скажи: «Прибегаю к защите Господа рассвета","от зла того, что Он сотворил,","от зла мрака, когда он наступает,","от зла колдуний, поплевывающих на узлы,","от зла завистника, когда он завидует»."],
+                kz: ["Айт: «Таңсәрінің Раббысына сиынып, пана тілеймін,","Оның жаратқандарының кесірінен,","Қараңғылық басса, түннің кесірінен,","Түйіндерге үрлейтін сиқыршылардың кесірінен,","Қызған кезде қызғаншақтың кесірінен»."]
             },
             114: {
                 ar: ["قُلْ أَعُوذُ بِرَبِّ النَّاسِ","مَلِكِ النَّاسِ","إِلَٰهِ النَّاسِ","مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ","الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ","مِنَ الْجِنَّةِ وَالنَّاسِ"],
                 tr: ["Qul a'ūdhu birabbi n-nās","Maliki n-nās","Ilāhi n-nās","Min sharri l-waswāsi l-khannās","Alladhī yuwaswisu fī ṣudūri n-nās","Mina l-jinnati wa n-nās"],
-                ru: ["Скажи: «Прибегаю к защите Господа людей,","Царя людей,","Бога людей,","от зла искусителя отступающего,","который наущает в груди людей,","от джиннов и людей»."]
+                ru: ["Скажи: «Прибегаю к защите Господа людей,","Царя людей,","Бога людей,","от зла искусителя отступающего,","который наущает в груди людей,","от джиннов и людей»."],
+                kz: ["Айт: «Адамдардың Раббысына пана тілеймін,","Адамдардың Патшасына,","Адамдардың Тәңіріне,","Жасырын азғырушының кесірінен,","Ол адамдардың кеуделеріне азғыру салады,","Жындардан да, адамдардан да»."]
+            },
+            103: {
+                ar: ["وَالْعَصْرِ","إِنَّ الْإِنسَانَ لَفِي خُسْرٍ","إِلَّا الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ وَتَوَاصَوْا بِالْحَقِّ وَتَوَاصَوْا بِالصَّبْرِ"],
+                tr: ["Wa l-'aṣr","Inna l-insāna lafī khusr","Illa lladhīna āmanū wa 'amilū ṣ-ṣāliḥāti wa tawāṣaw bil-ḥaqqi wa tawāṣaw biṣ-ṣabr"],
+                ru: ["Клянусь предвечерним временем,","что люди несут убытки,","кроме тех, которые уверовали, совершали праведные деяния, заповедали друг другу истину и заповедали друг другу терпение!"],
+                kz: ["Ғасырға серт!","Расында адам баласы зиянда,","Иман келтіріп, ізгі амал істеген, бір-біріне ақиқатты және сабырды насихаттағандардан басқа!"]
+            },
+            108: {
+                ar: ["إِنَّا أَعْطَيْنَاكَ الْكَوْثَرَ","فَصَلِّ لِرَبِّكَ وَانْحَرْ","إِنَّ شَانِئَكَ هُوَ الْأَبْتَرُ"],
+                tr: ["Innā a'ṭaynāka l-kawthar","Faṣalli lirabbika wa nḥar","Inna shāni'aka huwa l-abtar"],
+                ru: ["Мы даровали тебе аль-Каусар.","Совершай намаз ради своего Господа и закалывай жертву.","Воистину, твой ненавистник сам окажется бездетным."],
+                kz: ["Расында Біз саған Кәусарды бердік.","Ендеше Раббың үшін намаз оқы және құрбан шал.","Расында сені жек көрушінің өзі ұрпақсыз қалады."]
+            },
+            97: {
+                ar: ["إِنَّا أَنزَلْنَاهُ فِي لَيْلَةِ الْقَدْرِ","وَمَا أَدْرَاكَ مَا لَيْلَةُ الْقَدْرِ","لَيْلَةُ الْقَدْرِ خَيْرٌ مِّنْ أَلْفِ شَهْرٍ","تَنَزَّلُ الْمَلَائِكَةُ وَالرُّوحُ فِيهَا بِإِذْنِ رَبِّهِم مِّن كُلِّ أَمْرٍ","سَلَامٌ هِيَ حَتَّىٰ مَطْلَعِ الْفَجْرِ"],
+                tr: ["Innā anzalnāhu fī laylati l-qadr","Wa mā adrāka mā laylatu l-qadr","Laylatu l-qadri khayrun min alfi shahr","Tanazzalu l-malā'ikatu wa r-rūḥu fīhā bi'idhni rabbihim min kulli amr","Salāmun hiya ḥattā maṭla'i l-fajr"],
+                ru: ["Воистину, Мы ниспослали его в ночь предопределения.","Откуда ты мог знать, что такое ночь предопределения?","Ночь предопределения лучше тысячи месяцев.","В эту ночь ангелы и Дух нисходят с дозволения их Господа по всем Его повелениям.","Она благополучна вплоть до наступления зари."],
+                kz: ["Расында, Біз оны Қадір түнінде түсірдік.","Қадір түнінің не екенін білесің бе?","Қадір түні мың айдан қайырлы.","Ол түні періштелер мен Рух Раббыларының рұқсатымен әрбір істе түседі.","Ол таң атқанға дейін сәлем, тыныштық."]
             }
         };
 
@@ -258,17 +201,22 @@
         let currentLang = localStorage.getItem('lang') || 'ru';
 
         const i18n = {
-            ru: { timeTo: 'Время до', btn: 'Русский', prayers: { Fajr: 'Фаджр', Sunrise: 'Восход', Dhuhr: 'Зухр', Asr: 'Аср', Maghrib: 'Магриб', Isha: 'Иша' } },
-            kz: { timeTo: 'Уақыт қалды:', btn: 'Қазақша', prayers: { Fajr: 'Таң', Sunrise: 'Күншығыс', Dhuhr: 'Бесін', Asr: 'Екінті', Maghrib: 'Ақшам', Isha: 'Құптан' } },
-            en: { timeTo: 'Time until', btn: 'English', prayers: { Fajr: 'Fajr', Sunrise: 'Sunrise', Dhuhr: 'Dhuhr', Asr: 'Asr', Maghrib: 'Maghrib', Isha: 'Isha' } }
+            ru: { timeTo: 'Время до', btn: 'Русский', city: 'Алматы, Казахстан', back: '← Назад', all: 'Все', title: '📖 Суры Священного Корана - 114' },
+            kz: { timeTo: 'Уақыт қалды:', btn: 'Қазақша', city: 'Алматы, Қазақстан', back: '← Артқа', all: 'Барлығы', title: '📖 Құран сүрелері - 114' },
+            en: { timeTo: 'Time until', btn: 'English', city: 'Almaty, Kazakhstan', back: '← Back', all: 'All', title: '📖 Surahs of the Quran - 114' }
+        };
+
+        const prayers_i18n = {
+            ru: { Fajr: 'Фаджр', Sunrise: 'Восход', Dhuhr: 'Зухр', Asr: 'Аср', Maghrib: 'Магриб', Isha: 'Иша' },
+            kz: { Fajr: 'Таң', Sunrise: 'Күншығыс', Dhuhr: 'Бесін', Asr: 'Екінті', Maghrib: 'Ақшам', Isha: 'Құптан' },
+            en: { Fajr: 'Fajr', Sunrise: 'Sunrise', Dhuhr: 'Dhuhr', Asr: 'Asr', Maghrib: 'Maghrib', Isha: 'Isha' }
         };
 
         function showView(view) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.getElementById('view' + view.charAt(0).toUpperCase() + view.slice(1)).classList.add('active');
-            document.querySelectorAll('.controls.btn').forEach(b => b.classList.remove('active'));
-            if (view === 'timer') document.getElementById('tabTimer').classList.add('active');
-            if (view === 'surahList' || view === 'surah') document.getElementById('tabSurah').classList.add('active');
+            document.getElementById('tabTimer').classList.toggle('active', view === 'timer');
+            document.getElementById('tabSurah').classList.toggle('active', view === 'surahList' || view === 'surah');
             currentView = view;
             window.scrollTo(0, 0);
         }
@@ -282,20 +230,27 @@
             currentLang = langs[(idx + 1) % langs.length];
             localStorage.setItem('lang', currentLang);
             this.textContent = i18n[currentLang].btn;
+            document.getElementById('cityName').textContent = i18n[currentLang].city;
+            document.getElementById('surahListTitle').textContent = i18n[currentLang].title;
+            document.getElementById('backBtn').textContent = i18n[currentLang].back;
             renderPrayerList();
             updateCountdown();
+            renderSurahList();
         };
 
+        function updateHijriDate() {
+            try {
+                const date = new Date();
+                const hijri = new Intl.DateTimeFormat('ar-TN-u-ca-islamic', { day: 'numeric', month: 'long', year: 'numeric' }).format(date);
+                document.getElementById('hijriDate').textContent = hijri;
+            } catch(e) { document.getElementById('hijriDate').textContent = '15 Мухаррам 1448'; }
+        }
+
         function renderPrayerList() {
-            const t = i18n[currentLang];
+            const t = prayers_i18n[currentLang];
             const order = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
             const activePrayer = getNextPrayer().key;
-            document.getElementById('prayerList').innerHTML = order.map(key => `
-                <div class="prayer-item ${key === activePrayer? 'active' : ''}">
-                    <div class="prayer-name">${t.prayers[key]}</div>
-                    <div class="prayer-time">${PRAYER_TIMES[key]}</div>
-                </div>
-            `).join('');
+            document.getElementById('prayerList').innerHTML = order.map(key => `<div class="prayer-item ${key === activePrayer? 'active' : ''}"><div class="prayer-name">${t[key]}</div><div class="prayer-time">${PRAYER_TIMES[key]}</div></div>`).join('');
         }
 
         function getNextPrayer() {
@@ -303,76 +258,50 @@
             const order = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
             for (let key of order) {
                 const [h, m] = PRAYER_TIMES[key].split(':');
-                const prayerDate = new Date();
-                prayerDate.setHours(parseInt(h), parseInt(m), 0, 0);
-                if (prayerDate > now) return { key, date: prayerDate };
+                const d = new Date(); d.setHours(parseInt(h), parseInt(m), 0, 0);
+                if (d > now) return { key, date: d };
             }
             const [h, m] = PRAYER_TIMES.Fajr.split(':');
-            const prayerDate = new Date();
-            prayerDate.setDate(prayerDate.getDate() + 1);
-            prayerDate.setHours(parseInt(h), parseInt(m), 0, 0);
-            return { key: 'Fajr', date: prayerDate };
+            const d = new Date(); d.setDate(d.getDate()+1); d.setHours(parseInt(h), parseInt(m), 0, 0);
+            return { key: 'Fajr', date: d };
         }
 
         function updateCountdown() {
-            const t = i18n[currentLang];
+            const t = prayers_i18n[currentLang];
+            const t2 = i18n[currentLang];
             const next = getNextPrayer();
-            const now = new Date();
-            const diff = next.date - now;
+            const diff = next.date - new Date();
             const h = Math.floor(Math.abs(diff) / 3600000);
             const m = Math.floor((Math.abs(diff) % 3600000) / 60000);
             const s = Math.floor((Math.abs(diff) % 60000) / 1000);
-
-            document.getElementById('prayerLabel').textContent = t.timeTo + ' ' + t.prayers[next.key];
-            document.getElementById('timer').textContent = `${h < 10? '0' + h : h}:${m < 10? '0' + m : m}:${s < 10? '0' + s : s}`;
-            document.getElementById('nextPrayer').textContent = t.prayers[next.key] + ' ' + PRAYER_TIMES[next.key];
-            renderPrayerList();
+            document.getElementById('prayerLabel').textContent = t2.timeTo + ' ' + t[next.key];
+            document.getElementById('timer').textContent = `${h<10?'0'+h:h}:${m<10?'0'+m:m}:${s<10?'0'+s:s}`;
+            document.getElementById('nextPrayer').textContent = t[next.key] + ' ' + PRAYER_TIMES[next.key];
         }
 
         function renderSurahList() {
-            document.getElementById('surahList').innerHTML = SURAHS.map(s => `
-                <div class="surah-item" onclick="loadSurah(${s.id})">
-                    <div class="surah-num">${s.id}</div>
-                    <div>
-                        <div class="surah-name-ar">${s.name_ar}</div>
-                        <div class="surah-name-ru">${s.name_ru}</div>
-                        <div class="surah-ayahs">${s.ayahs} аятов</div>
-                    </div>
-                </div>
-            `).join('');
+            const lang = currentLang;
+            document.getElementById('surahList').innerHTML = SURAHS.map(s => {
+                const name = lang === 'kz'? s.name_kz : s.name_ru;
+                return `<div class="surah-item" onclick="loadSurah(${s.id})"><div class="surah-num">${s.id}</div><div><div class="surah-name-ar">${s.name_ar}</div><div class="surah-name-ru">${name}</div><div class="surah-ayahs">${s.ayahs} аят</div></div></div>`;
+            }).join('');
         }
 
         function loadSurah(id) {
             showView('surah');
             const surah = SURAHS.find(s => s.id === id);
-            currentSurah = id;
-
             document.getElementById('surahTitleAr').textContent = surah.name_ar;
-            document.getElementById('surahTitleRu').textContent = surah.name_ru;
-
+            document.getElementById('surahTitleRu').textContent = currentLang === 'kz'? surah.name_kz : surah.name_ru;
             const data = QURAN_DATA[id];
             if (!data) {
-                document.getElementById('ayahContainer').innerHTML = `
-                    <div style="text-align:center; padding:40px; opacity:0.7;">
-                        Сура "${surah.name_ru}" пока не загружена<br>
-                        Доступны: Аль-Фатиха, Аль-Ихлас, Аль-Фаляк, Ан-Нас
-                    </div>
-                `;
+                document.getElementById('ayahContainer').innerHTML = `<div style="text-align:center;padding:40px;opacity:0.7;">Сүре "${surah.name_kz}" әлі жүктелмеді.<br>Қазір 30-шы параның қысқа сүрелері бар.<br><br>Бұл сүре үшін <a href="https://quran.com/${id}" target="_blank" style="color:#10b981">quran.com</a> оқыңыз.</div>`;
                 return;
             }
-
-            renderAyahs(data.ar, data.tr, data.ru);
+            renderAyahs(data.ar, data.tr, data.ru, data.kz);
         }
 
-        function renderAyahs(ar, tr, ru) {
-            document.getElementById('ayahContainer').innerHTML = ar.map((a, i) => `
-                <div class="ayah">
-                    <div class="ayah-num">Аят ${i + 1}</div>
-                    <div class="ayah-ar ayah-part">${a}</div>
-                    <div class="ayah-tr ayah-part">${tr[i]}</div>
-                    <div class="ayah-ru ayah-part">${ru[i]}</div>
-                </div>
-            `).join('');
+        function renderAyahs(ar, tr, ru, kz) {
+            document.getElementById('ayahContainer').innerHTML = ar.map((a, i) => `<div class="ayah"><div class="ayah-num">Аят ${i+1}</div><div class="ayah-ar ayah-part">${a}</div><div class="ayah-tr ayah-part">${tr[i]}</div><div class="ayah-ru ayah-part">${ru[i]}</div><div class="ayah-kz ayah-part">🇰🇿 ${kz[i]}</div></div>`).join('');
             switchTab(currentTab);
         }
 
@@ -387,21 +316,21 @@
 
         function switchTab(tab) {
             document.querySelectorAll('.ayah-part').forEach(el => el.classList.add('hidden'));
-            if (tab === 'all') {
-                document.querySelectorAll('.ayah-part').forEach(el => el.classList.remove('hidden'));
-            } else if (tab === 'ar') {
-                document.querySelectorAll('.ayah-ar').forEach(el => el.classList.remove('hidden'));
-            } else if (tab === 'tr') {
-                document.querySelectorAll('.ayah-tr').forEach(el => el.classList.remove('hidden'));
-            } else if (tab === 'ru') {
-                document.querySelectorAll('.ayah-ru').forEach(el => el.classList.remove('hidden'));
-            }
+            if (tab === 'all') document.querySelectorAll('.ayah-part').forEach(el => el.classList.remove('hidden'));
+            else if (tab === 'ar') document.querySelectorAll('.ayah-ar').forEach(el => el.classList.remove('hidden'));
+            else if (tab === 'tr') document.querySelectorAll('.ayah-tr').forEach(el => el.classList.remove('hidden'));
+            else if (tab === 'ru') document.querySelectorAll('.ayah-ru').forEach(el => el.classList.remove('hidden'));
+            else if (tab === 'kz') document.querySelectorAll('.ayah-kz').forEach(el => el.classList.remove('hidden'));
         }
 
         document.getElementById('langBtn').textContent = i18n[currentLang].btn;
+        document.getElementById('cityName').textContent = i18n[currentLang].city;
+        document.getElementById('surahListTitle').textContent = i18n[currentLang].title;
+        updateHijriDate();
         updateCountdown();
         setInterval(updateCountdown, 1000);
         renderPrayerList();
+        renderSurahList();
     </script>
 </body>
 </html>
